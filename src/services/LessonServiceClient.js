@@ -1,7 +1,9 @@
 let _singleton = Symbol();
 const COURSE_API_URL = 'http://localhost:8080/api/course';
+const MODULE_API_URL = 'http://localhost:8080/api/module';
+const LESSON_API_URL = 'http://localhost:8080/api/lesson';
 
-class CourseServiceClient {
+class LessonServiceClient {
     constructor(singletonToken) {
         if (_singleton !== singletonToken)
             throw new Error('Cannot instantiate directly.');
@@ -9,20 +11,20 @@ class CourseServiceClient {
 
     static get instance() {
         if (!this[_singleton])
-            this[_singleton] = new CourseServiceClient(_singleton);
+            this[_singleton] = new LessonServiceClient(_singleton);
         return this[_singleton]
     }
 
-    findAllCourses() {
-        return fetch(COURSE_API_URL)
+    findAllLessons() {
+        return fetch(LESSON_API_URL)
             .then(function (response) {
                 return response.json();
             });
     }
 
-    createCourse(course) {
-        return fetch(COURSE_API_URL, {
-            body: JSON.stringify(course),
+    createLesson(courseId,moduleId,lesson) {
+        return fetch(COURSE_API_URL+'/'+courseId+'/'+'module/'+moduleId+'/lesson' ,{
+            body: JSON.stringify(lesson),
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -32,27 +34,36 @@ class CourseServiceClient {
         });
     }
 
-    deleteCourse(courseId, callback) {
-        return fetch(COURSE_API_URL + '/' + courseId,
+    deleteLesson(lessonId,callback) {
+        return fetch(LESSON_API_URL + '/' + lessonId,
             {
                 method: 'DELETE'
             }).then(callback);
 
     }
 
-    findCourseById(courseId, callback) {
-        return fetch(COURSE_API_URL + '/' + courseId,
+    findLessonById(lessonId) {
+        return fetch(LESSON_API_URL + '/' + lessonId,
             {
                 method: 'GET'
             }).then(function (response) {
             return response.json();
-        }).then(callback);
+        });
     }
 
-    updateCourse(courseId,course ,callback) {
-        return fetch(COURSE_API_URL + '/' + courseId,
+    findAllLessonsForModule(courseId,moduleId) {
+        return fetch(COURSE_API_URL+'/'+courseId+'/'+'module/'+moduleId+'/lesson' ,
             {
-                body: JSON.stringify(course),
+                method: 'GET'
+            }).then(function (response) {
+            return response.json();
+        });
+    }
+
+    updateLesson(lessonId,lesson) {
+        return fetch(LESSON_API_URL + '/' + lessonId,
+            {
+                body: JSON.stringify(lesson),
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -63,6 +74,7 @@ class CourseServiceClient {
     }
 
 
+
 }
 
-export default CourseServiceClient;
+export default LessonServiceClient;

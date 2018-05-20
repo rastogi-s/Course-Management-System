@@ -21,7 +21,7 @@ class ModuleServiceClient {
             });
     }
 
-    createModule(module,courseId) {
+    createModule(courseId,module) {
         return fetch(COURSE_API_URL+'/'+courseId+'/'+'module', {
             body: JSON.stringify(module),
             headers: {
@@ -30,7 +30,7 @@ class ModuleServiceClient {
             method: 'POST'
         }).then(function (response) {
             return response.json();
-        })
+        });
     }
 
     deleteModule(moduleId,callback) {
@@ -41,13 +41,13 @@ class ModuleServiceClient {
 
     }
 
-    findModuleById(moduleId) {
+    findModuleById(moduleId,callback) {
         return fetch(MODULE_API_URL + '/' + moduleId,
             {
                 method: 'GET'
             }).then(function (response) {
             return response.json();
-        });
+        }).then(callback);
     }
 
     findAllModulesForCourse(courseId) {
@@ -59,10 +59,10 @@ class ModuleServiceClient {
         });
     }
 
-    updateCourse(moduleId,course) {
+    updateCourse(moduleId,module) {
         return fetch(MODULE_API_URL + '/' + moduleId,
             {
-                body: JSON.stringify(course),
+                body: JSON.stringify(module),
                 headers: {
                     'Content-Type': 'application/json'
                 },

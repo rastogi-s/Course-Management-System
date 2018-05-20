@@ -2,10 +2,6 @@ import React from 'react';
 
 class AlertDiv extends React.Component {
 
-    constructor(props){
-        super(props);
-
-    }
 
     render() {
 

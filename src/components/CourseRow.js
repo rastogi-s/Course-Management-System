@@ -1,15 +1,17 @@
 import React from 'react';
 
+
+import { Link } from 'react-router-dom'
+
 class CourseRow extends React.Component {
-    constructor(props){
-        super(props);
-    }
 
     render() {
-
+        const link=(<Link to={`/course/${this.props.course.id}/edit`}>
+            {this.props.course.title}
+        </Link>);
         return (
             <tr style={{ background:'white'}}>
-                <td style={{width:"40%"}}>{this.props.course.title}</td>
+                <td style={{width:"40%"}}>{link}</td>
                 <td style={{width:"25%",paddingLeft:30}}>me</td>
                 <td style={{width:"25%"}}>{this.props.course.displayModDate}</td>
                 <td style={{width:"10%"}}>

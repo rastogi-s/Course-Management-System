@@ -12,7 +12,7 @@ import CourseManager from './containers/CourseManager';
 
 var containers = (
 
-    <div className="container" >
+    <div>
         <CourseManager/>
     </div>
 

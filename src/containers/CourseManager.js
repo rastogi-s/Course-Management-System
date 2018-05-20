@@ -1,28 +1,26 @@
 import React from 'react';
 import CourseList from './CourseList';
+import CourseEditor from './CourseEditor';
+import {BrowserRouter as Router, Route} from 'react-router-dom'
+import LessonTabs from "./LessonTabs";
 
 class CourseManager extends React.Component {
 
     render() {
-        return (
-            <div>
-                <nav className="navbar navbar-dark  fixed-top bg-primary">
-                    <a className="navbar-brand" href="#"><h1 style={{fontFamily:'Serif'}}>Course Manager</h1></a>
-                    <form className="form-inline">
-                        <input className="form-control mr-sm-2" type="search" placeholder="Search Course" aria-label="Search" required/>
-                        <i className="btn fa-2x fa fa-search" title="Search"
-                           style={{color: 'white', background: 'red',  borderRadius: "50px"}}></i>
-                    </form>
-                </nav>
 
-                <div style={{
-                    paddingTop: "5rem",
-                    paddingBottom: "5rem",
-                    color: "5a5a5a"
-                }}>
-                    <CourseList/>
+        return (
+            <Router>
+                <div>
+                    <Route path="/course/list"
+                           component={CourseList}>
+                    </Route>
+                    <Route path="/course/:courseId/edit"
+                           component={CourseEditor}>
+                    </Route>
+
                 </div>
-            </div>
+            </Router>
+
         )
     }
 }

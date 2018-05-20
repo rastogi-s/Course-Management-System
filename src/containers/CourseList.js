@@ -10,15 +10,10 @@ import CourseServiceClient from './../services/CourseServiceClient'
 
 class CourseList extends React.Component {
 
-    // componentDidUpdate()
-    // {
-    //    console.log(document.getElementsByClassName('dropdown-toggle'));
-    //     document.getElementsByClassName('dropdown-toggle')[0].bootstrapToggle();
-    //     // $('.dropdown-toggle').bootstrapToggle();
-    // }
     constructor(props) {
         super(props);
         this.courseService = CourseServiceClient.instance;
+        this.myRef = React.createRef();
         this.state = {
             courses: [],
             course: {},
@@ -112,13 +107,12 @@ class CourseList extends React.Component {
             , 8: 'September', 9: 'October', 10: 'November', 11: 'December'
         };
 
-        //console.log('in handle date');
         var today = new Date();
         var returnDate = date;
         if (date.getDay() === today.getDay() &&
             date.getMonth() === today.getMonth() &&
             date.getFullYear() === today.getFullYear()) {
-            //console.log("todays date:" + date); 
+            //console.log("todays date:" + date);
             if (date.getHours() < 12)
                 returnDate = date.getHours() + ':' + date.getMinutes() + ' AM';
             else
@@ -184,7 +178,7 @@ class CourseList extends React.Component {
                     newJson[month[modDate['month']]]=[];
                 newJson[month[modDate['month']]].push(courses[c]);
             }
-            else if (modDate['year'] === currentDate['year'] && currentDate['month']- modDate['month'] ==1) {
+            else if (modDate['year'] === currentDate['year'] && currentDate['month']- modDate['month'] ===1) {
                 if(newJson['Previous Month']==null)
                     newJson['Previous Month']=[];
                 newJson['Previous Month'].push(courses[c]);
@@ -224,42 +218,7 @@ class CourseList extends React.Component {
 
     }
 
-    // addEmptyRows(modifDate, previous) {
-    //
-    //     var today = new Date(previous);
-    //     var modifiedDate = new Date(modifDate);
-    //     var currentDate = {'day': today.getDate(), 'month': today.getMonth()+1, 'year': today.getFullYear()};
-    //     var modDate = {
-    //         'day': modifiedDate.getDate(),
-    //         'month': modifiedDate.getMonth()+1,
-    //         'year': modifiedDate.getFullYear()
-    //     };
-    //
-    //     console.log('previous');
-    //     console.log(currentDate);
-    //     console.log('currebt');
-    //     console.log(modDate);
-    //
-    //
-    //     if (modDate['year'] < currentDate['year'])
-    //         return "Previous Year";
-    //     else if (modDate['year'] === currentDate['year'] && modDate['month'] < currentDate['month']
-    //         && currentDate['month'] - modDate['month'] == 1) {
-    //         return "Previous Month";
-    //     }
-    //     else if (modDate['month'] === currentDate['month'] && modDate['year'] === currentDate['year']
-    //         && currentDate['day'] - modDate['day'] < 7 && currentDate['day'] - modDate['day'] > 1) {
-    //         return "Previous 7 days";
-    //     }
-    //     else if (modDate['month'] == currentDate['month'] && modDate['year'] === currentDate['year']
-    //         && currentDate['day'] - modDate['day'] === 1) {
-    //         return "Yesterday";
-    //     }
-    //     else {
-    //         return null;
-    //     }
-    //
-    // }
+
 
     createCourse() {
         console.log(this.state.course.title);
@@ -273,6 +232,7 @@ class CourseList extends React.Component {
                         alertClass: 'alert-success',
                         course: {title: ''}
                     });
+                    this.myRef.current.value='';
                     this.findAllCourses();
                 });
         }
@@ -298,7 +258,22 @@ class CourseList extends React.Component {
 
 
         return (
-            <div>
+            <div >
+                <nav className="navbar navbar-dark  fixed-top bg-primary">
+                    <a className="navbar-brand" href="#"><h1 style={{fontFamily: 'Serif'}}>Course Manager</h1></a>
+                    <form className="form-inline">
+                        <input className="form-control mr-sm-2" type="search" placeholder="Search Course"
+                               aria-label="Search" required/>
+                        <i className="btn fa-2x fa fa-search" title="Search"
+                           style={{color: 'white', background: 'red', borderRadius: "50px"}}></i>
+                    </form>
+                </nav>
+
+                <div style={{
+                    paddingTop: "5rem",
+                    paddingBottom: "5rem",
+                    color: "5a5a5a"
+                }} className="container">
                 <AlertDiv alertMessage={this.state.alertMessage} display={this.state.alertDisplay}
                           class={this.state.alertClass}/>
                 <table className="table">
@@ -333,7 +308,7 @@ class CourseList extends React.Component {
                     <thead>
                     <tr>
                         <th colSpan="3"><input id="newCourse" className="form-control" type="text"
-                                               placeholder="New Course Title" value={this.state.course.title}
+                                               placeholder="New Course Title" ref={this.myRef}
                                                onChange={this.titleChange} onFocus={this.removeError}/>
 
                         </th>
@@ -348,6 +323,9 @@ class CourseList extends React.Component {
                     </tbody>
                 </table>
             </div>
+            </div>
+
+
 
         )
     }
