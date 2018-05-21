@@ -1,6 +1,7 @@
 import React from 'react';
 import ModuleServiceClient from "../services/ModuleServiceClient";
 import LessonTabs from "./LessonTabs";
+import LessonEditor from "./LessonEditor"
 import { Route} from 'react-router-dom';
 
 class ModuleEditor extends React.Component {
@@ -21,7 +22,7 @@ class ModuleEditor extends React.Component {
         this.selectCourse
         (newProps.match.params.courseId);
         this.selectModule
-        (this.props.match.params.moduleId);
+        (newProps.match.params.moduleId);
     }
 
 
@@ -43,7 +44,8 @@ class ModuleEditor extends React.Component {
     renderLessonTabs() {
         var module = this.state.module;
         if(this.state.moduleId!=null && this.state.moduleId!='' && this.state.module!=null)
-            return <LessonTabs key={this.state.moduleId} courseId={this.state.courseId} module={module}/>
+            return <LessonTabs key={this.state.moduleId} courseId={this.state.courseId} moduleId={this.state.moduleId}
+                               module={module}/>
     }
 
 
@@ -52,14 +54,11 @@ class ModuleEditor extends React.Component {
 
         return (
             <div>
-
                 {this.renderLessonTabs()}
                 <div >
-                    {/*<Route path="/course/:courseId/edit/module/:moduleId"*/}
-                           {/*component={LessonTabs} />*/}
+                    <Route path="/course/:courseId/edit/module/:moduleId/edit/lesson/:lessonId"
+                           component={LessonEditor}  />
                 </div>
-
-
             </div>
 
         );

@@ -2,6 +2,7 @@ import React from 'react';
 import ModuleServiceClient from "../services/ModuleServiceClient";
 import AlertDiv from './../components/AlertDiv';
 import ModuleListItem from "../components/ModuleListItem";
+import { withRouter } from 'react-router-dom';
 
 class ModuleList extends React.Component {
 
@@ -15,7 +16,7 @@ class ModuleList extends React.Component {
             module: {},
             alertMessage: '',
             alertDisplay: 'none',
-            alertClass: '',
+            alertClass: ''
             //sortType: 'modified'
         };
         this.deleteModule = this.deleteModule.bind(this);
@@ -31,6 +32,7 @@ class ModuleList extends React.Component {
     componentDidMount() {
         this.setCourseId(this.props.courseId);
         this.findAllModulesForCourse();
+
     }
 
     componentWillReceiveProps() {
@@ -80,7 +82,16 @@ class ModuleList extends React.Component {
 
     deleteModule(id) {
         this.moduleService.deleteModule(id).then(() => {
-            this.findAllModulesForCourse();
+
+            var loc=window.location.href;
+            var newLoc=loc.substring(0,loc.indexOf("edit")+4)
+            console.log(loc);
+            console.log(newLoc);
+            if(newLoc===loc || newLoc===(loc+"/")  || (newLoc+"/")===loc )
+                this.findAllModulesForCourse();
+            else
+                window.location.href=newLoc;
+
         });
     }
 

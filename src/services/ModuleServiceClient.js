@@ -29,7 +29,9 @@ class ModuleServiceClient {
             },
             method: 'POST'
         }).then(function (response) {
-            return response.json();
+            if(response.headers.get("content-type")!=null)
+                return response.json();
+            else return null;
         });
     }
 
@@ -46,7 +48,9 @@ class ModuleServiceClient {
             {
                 method: 'GET'
             }).then(function (response) {
-            return response.json();
+            if(response.headers.get("content-type")!=null)
+                return response.json();
+            else return null;
         }).then(callback);
     }
 
@@ -55,7 +59,9 @@ class ModuleServiceClient {
             {
                 method: 'GET'
             }).then(function (response) {
-            return response.json();
+            if(response.headers.get("content-type")!=null)
+                return response.json();
+            else return null;
         });
     }
 
@@ -68,7 +74,9 @@ class ModuleServiceClient {
                 },
                 method: 'PUT'
             }).then(function (response) {
-            return response.json();
+            if(response.headers.get("content-type")!=null)
+                return response.json();
+            else return null;
         });
     }
 

@@ -16,7 +16,9 @@ class CourseServiceClient {
     findAllCourses() {
         return fetch(COURSE_API_URL)
             .then(function (response) {
-                return response.json();
+                if(response.headers.get("content-type")!=null)
+                    return response.json();
+                else return null;
             });
     }
 
@@ -28,7 +30,9 @@ class CourseServiceClient {
             },
             method: 'POST'
         }).then(function (response) {
-            return response.json();
+            if(response.headers.get("content-type")!=null)
+                return response.json();
+            else return null;
         });
     }
 
@@ -45,7 +49,9 @@ class CourseServiceClient {
             {
                 method: 'GET'
             }).then(function (response) {
-            return response.json();
+            if(response.headers.get("content-type")!=null)
+                return response.json();
+            else return null;
         }).then(callback);
     }
 
@@ -58,7 +64,10 @@ class CourseServiceClient {
                 },
                 method: 'PUT'
             }).then(function (response) {
-            return response.json();
+            if(response.headers.get("content-type")!=null)
+                return response.json();
+            else return null;
+            //return response.json();
         });
     }
 

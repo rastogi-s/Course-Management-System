@@ -1,8 +1,8 @@
 let _singleton = Symbol();
 const COURSE_API_URL = 'http://localhost:8080/api/course';
-const LESSON_API_URL = 'http://localhost:8080/api/lesson';
+const TOPIC_API_URL = 'http://localhost:8080/api/topic';
 
-class LessonServiceClient {
+class TopicServiceClient {
     constructor(singletonToken) {
         if (_singleton !== singletonToken)
             throw new Error('Cannot instantiate directly.');
@@ -10,12 +10,12 @@ class LessonServiceClient {
 
     static get instance() {
         if (!this[_singleton])
-            this[_singleton] = new LessonServiceClient(_singleton);
+            this[_singleton] = new TopicServiceClient(_singleton);
         return this[_singleton]
     }
 
-    findAllLessons() {
-        return fetch(LESSON_API_URL)
+    findAllLTopics() {
+        return fetch(TOPIC_API_URL)
             .then(function (response) {
                 if(response.headers.get("content-type")!=null)
                     return response.json();
@@ -23,9 +23,9 @@ class LessonServiceClient {
             });
     }
 
-    createLesson(courseId,moduleId,lesson) {
-        return fetch(COURSE_API_URL+'/'+courseId+'/'+'module/'+moduleId+'/lesson' ,{
-            body: JSON.stringify(lesson),
+    createTopic(courseId,moduleId,lessonId,topic) {
+        return fetch(COURSE_API_URL+'/'+courseId+'/'+'module/'+moduleId+'/lesson/'+lessonId+'/topic' ,{
+            body: JSON.stringify(topic),
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -37,16 +37,16 @@ class LessonServiceClient {
         });
     }
 
-    deleteLesson(lessonId,callback) {
-        return fetch(LESSON_API_URL + '/' + lessonId,
+    deleteTopic(topicId,callback) {
+        return fetch(TOPIC_API_URL + '/' + topicId,
             {
                 method: 'DELETE'
             }).then(callback);
 
     }
 
-    findLessonById(lessonId) {
-        return fetch(LESSON_API_URL + '/' + lessonId,
+    findTopicById(topicId) {
+        return fetch(TOPIC_API_URL + '/' + topicId,
             {
                 method: 'GET'
             }).then(function (response) {
@@ -56,8 +56,8 @@ class LessonServiceClient {
         });
     }
 
-    findAllLessonsForModule(courseId,moduleId) {
-        return fetch(COURSE_API_URL+'/'+courseId+'/'+'module/'+moduleId+'/lesson' ,
+    findAllTopicsForLesson(courseId,moduleId,lessonId) {
+        return fetch(COURSE_API_URL+'/'+courseId+'/'+'module/'+moduleId+'/lesson/'+lessonId+'/topic' ,
             {
                 method: 'GET'
             }).then(function (response) {
@@ -67,10 +67,10 @@ class LessonServiceClient {
         });
     }
 
-    updateLesson(lessonId,lesson) {
-        return fetch(LESSON_API_URL + '/' + lessonId,
+    updateTopic(topicId,topic) {
+        return fetch(TOPIC_API_URL + '/' + topicId,
             {
-                body: JSON.stringify(lesson),
+                body: JSON.stringify(topic),
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -82,8 +82,6 @@ class LessonServiceClient {
         });
     }
 
-
-
 }
 
-export default LessonServiceClient;
+export default TopicServiceClient;
