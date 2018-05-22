@@ -83,10 +83,10 @@ class CourseEditor extends React.Component {
 
                 }}>
                     <div className="row">
-                        <div className="col-md-3 no-float" style={{background: 'black', padding: 40}}>
+                        <div className="col-md-3 float-left" style={{background: 'black', padding: 40,margin:20,marginLeft:30,borderRadius:10}}>
                             {this.renderModuleList()}
                         </div>
-                        <div className="col-md-9 no-float" style={{background: 'white', padding: 40}}>
+                        <div className="col-md-8 float-right" style={{background: 'black', padding: 40,margin:20,borderRadius:10}}>
                             <Route path="/course/:courseId/edit/module/:moduleId"
                                 component={ModuleEditor} />
                         </div>

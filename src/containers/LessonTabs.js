@@ -26,7 +26,7 @@ class LessonTabs extends React.Component {
         this.createLesson = this.createLesson.bind(this);
         this.titleChange = this.titleChange.bind(this);
         this.removeError = this.removeError.bind(this);
-        this.findAllLessonsForModule = this.findAllLessonsForModule.bind(this);
+        //this.findAllLessonsForModule = this.findAllLessonsForModule.bind(this);
     }
 
     componentDidMount() {
@@ -43,7 +43,7 @@ class LessonTabs extends React.Component {
         this.setCourseId(props.courseId);
         this.setModule(props.module);
         this.setModuleId(props.moduleId);
-        if(this.state.courseId!=null && this.state.courseId!='' && this.state.moduleId!=null && this.state.moduleId!='' )
+        if(props.courseId!=null && props.courseId!='' && props.moduleId!=null && props.moduleId!='' )
             this.findAllLessonsForModule();
     }
 
@@ -134,8 +134,8 @@ class LessonTabs extends React.Component {
             <div>
                 <AlertDiv alertMessage={this.state.alertMessage} display={this.state.alertDisplay}
                           class={this.state.alertClass}/>
-                <nav className="navbar navbar-dark bg-dark mb-3">
-                    <a className="navbar-brand" href="#">{this.props.module.title}</a>
+                <nav className="navbar navbar-dark bg-dark mb-3" style={{borderRadius:5}}>
+                    <a className="navbar-brand"  style={{fontFamily:'Ariel',fontSize:"x-large",color:'white'}}>{this.props.module.title}</a>
                     <form className="form-inline"  >
                         <input className="form-control w-75" placeholder="New Lesson Name"
                                onChange={this.titleChange} onFocus={this.removeError} ref={this.myRef}/>

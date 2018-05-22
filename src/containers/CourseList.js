@@ -129,16 +129,24 @@ class CourseList extends React.Component {
     courseRow() {
         var courses = this.state.courses;
         var groupedCourses;
-        if(courses!=null && courses.length!=0){
-            groupedCourses=this.groupCoursesOnDate(courses);
-            //console.log(groupedCourses);
-        }
         var rows = [];
+        if (this.state.sortType != 'title') {
+            if (courses != null && courses.length != 0) {
+                groupedCourses = this.groupCoursesOnDate(courses);
+                //console.log(groupedCourses);
+            }
 
-        for (var cat in groupedCourses) {
-            //console.log(cat);
-            rows.push(<EmptyRow key={cat} day={cat}/>);
-            courses=groupedCourses[cat];
+
+            for (var cat in groupedCourses) {
+                //console.log(cat);
+                rows.push(<EmptyRow key={cat} day={cat}/>);
+                courses = groupedCourses[cat];
+                for (var c in courses) {
+                    rows.push(<CourseRow course={courses[c]} key={courses[c].id} deleteRow={this.deleteCourse}/>);
+                }
+            }
+        }else{
+
             for (var c in courses) {
                 rows.push(<CourseRow course={courses[c]} key={courses[c].id} deleteRow={this.deleteCourse}/>);
             }
@@ -149,7 +157,7 @@ class CourseList extends React.Component {
     }
 
 
-    groupCoursesOnDate(courses){
+    groupCoursesOnDate(courses) {
 
         var month = {
             0: 'January', 1: 'February', 2: 'March', 3: 'April', 4: 'May', 5: 'June', 6: 'July', 7: 'August'
@@ -157,53 +165,53 @@ class CourseList extends React.Component {
         };
         var today = new Date();
         var currentDate = {'day': today.getDate(), 'month': today.getMonth(), 'year': today.getFullYear()};
-        var newJson={};
-        for(var c in courses) {
-            var modifiedDate=new Date(courses[c].modified);
+        var newJson = {};
+        for (var c in courses) {
+            var modifiedDate = new Date(courses[c].modified);
 
             var modDate = {
                 'day': modifiedDate.getDate(),
-                'month': modifiedDate.getMonth() ,
+                'month': modifiedDate.getMonth(),
                 'year': modifiedDate.getFullYear()
             };
 
             console.log();
             if (modDate['year'] < currentDate['year']) {
-                if(newJson["Previous Year"]==null)
-                    newJson["Previous Year"]=[];
+                if (newJson["Previous Year"] == null)
+                    newJson["Previous Year"] = [];
                 newJson["Previous Year"].push(courses[c]);
             }
-            else if (modDate['year'] === currentDate['year'] && currentDate['month'] - modDate['month'] > 1 ) {
-                if(newJson[month[modDate['month']]]==null)
-                    newJson[month[modDate['month']]]=[];
+            else if (modDate['year'] === currentDate['year'] && currentDate['month'] - modDate['month'] > 1) {
+                if (newJson[month[modDate['month']]] == null)
+                    newJson[month[modDate['month']]] = [];
                 newJson[month[modDate['month']]].push(courses[c]);
             }
-            else if (modDate['year'] === currentDate['year'] && currentDate['month']- modDate['month'] ===1) {
-                if(newJson['Previous Month']==null)
-                    newJson['Previous Month']=[];
+            else if (modDate['year'] === currentDate['year'] && currentDate['month'] - modDate['month'] === 1) {
+                if (newJson['Previous Month'] == null)
+                    newJson['Previous Month'] = [];
                 newJson['Previous Month'].push(courses[c]);
             }
             else if (modDate['year'] === currentDate['year'] && currentDate['month'] === modDate['month']
-            && currentDate['day']- modDate['day']  >= 7) {
-                if(newJson['Current Month']==null)
-                    newJson['Current Month']=[];
+                && currentDate['day'] - modDate['day'] >= 7) {
+                if (newJson['Current Month'] == null)
+                    newJson['Current Month'] = [];
                 newJson['Current Month'].push(courses[c]);
             }
             else if (modDate['year'] === currentDate['year'] && modDate['month'] === currentDate['month']
-                && currentDate['day']- modDate['day']  < 7 && currentDate['day']- modDate['day']  > 1) {
-                if(newJson['Previous 7 days']==null)
-                    newJson['Previous 7 days']=[];
+                && currentDate['day'] - modDate['day'] < 7 && currentDate['day'] - modDate['day'] > 1) {
+                if (newJson['Previous 7 days'] == null)
+                    newJson['Previous 7 days'] = [];
                 newJson['Previous 7 days'].push(courses[c]);
             }
             else if (modDate['year'] === currentDate['year'] && modDate['month'] === currentDate['month']
                 && currentDate['day'] - modDate['day'] === 1) {
-                if(newJson['Yesterday']==null)
-                    newJson['Yesterday']=[];
+                if (newJson['Yesterday'] == null)
+                    newJson['Yesterday'] = [];
                 newJson['Yesterday'].push(courses[c]);
             }
-            else{
-                if(newJson['Today']==null)
-                    newJson['Today']=[];
+            else {
+                if (newJson['Today'] == null)
+                    newJson['Today'] = [];
                 newJson['Today'].push(courses[c]);
 
             }
@@ -214,10 +222,9 @@ class CourseList extends React.Component {
         //console.log("newJson");
         console.log(newJson);
 
-    return newJson;
+        return newJson;
 
     }
-
 
 
     createCourse() {
@@ -232,7 +239,7 @@ class CourseList extends React.Component {
                         alertClass: 'alert-success',
                         course: {title: ''}
                     });
-                    this.myRef.current.value='';
+                    this.myRef.current.value = '';
                     this.findAllCourses();
                 });
         }
@@ -258,14 +265,14 @@ class CourseList extends React.Component {
 
 
         return (
-            <div >
-                <nav className="navbar navbar-dark  fixed-top bg-primary">
+            <div>
+                <nav className="navbar navbar-dark  fixed-top bg-dark">
                     <a className="navbar-brand" href="#"><h1 style={{fontFamily: 'Serif'}}>Course Manager</h1></a>
                     <form className="form-inline">
                         <input className="form-control mr-sm-2" type="search" placeholder="Search Course"
                                aria-label="Search" required/>
-                        <i className="btn fa-2x fa fa-search" title="Search"
-                           style={{color: 'white', background: 'red', borderRadius: "50px"}}></i>
+                        <i className="btn btn-dark fa-2x fa fa-search" title="Search"
+                           style={{color: 'white'}}></i>
                     </form>
                 </nav>
 
@@ -274,57 +281,56 @@ class CourseList extends React.Component {
                     paddingBottom: "5rem",
                     color: "5a5a5a"
                 }} className="container">
-                <AlertDiv alertMessage={this.state.alertMessage} display={this.state.alertDisplay}
-                          class={this.state.alertClass}/>
-                <table className="table">
-                    <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th><select style={{background: 'lightgrey', border: 'none', fontWeight: 'bold'}}>
-                            <option>Owned By Me</option>
-                            <option>Owned By Others</option>
-                            <option>Owned By Anyone</option>
-                        </select>
-                        </th>
-                        <th>Last Modified</th>
-                        <th style={{whiteSpace: "nowrap"}}>
-                            <div className="dropdown">
-                                <i className="btn fa-1x fa fa-th " title="grid"
-                                   style={{color: 'black'}}></i>
-                                <i className="btn fa-1x fa dropdown-toggle" title="Sort"
-                                   style={{color: 'black'}} id="dropdownMenuButton" data-toggle="dropdown"
-                                   aria-haspopup="true" aria-expanded="false"></i>
-                                <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a className="dropdown-item" onClick={this.setSortByTitle}>Sort By Title</a>
-                                    <a className="dropdown-item" onClick={this.setSortByLastModified}>Sort By Last
-                                        Modified</a>
-                                    <a className="dropdown-item" onClick={this.setSortByLastOpened}>Sort By Last
-                                        Opened</a>
+                    <AlertDiv alertMessage={this.state.alertMessage} display={this.state.alertDisplay}
+                              class={this.state.alertClass}/>
+                    <table className="table">
+                        <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th><select style={{background: 'lightgrey', border: 'none', fontWeight: 'bold'}}>
+                                <option>Owned By Me</option>
+                                <option>Owned By Others</option>
+                                <option>Owned By Anyone</option>
+                            </select>
+                            </th>
+                            <th>Last Modified</th>
+                            <th style={{whiteSpace: "nowrap"}}>
+                                <div className="dropdown">
+                                    <i className="btn fa-1x fa fa-th " title="grid"
+                                       style={{color: 'black'}}></i>
+                                    <i className="btn fa-1x fa dropdown-toggle" title="Sort"
+                                       style={{color: 'black'}} id="dropdownMenuButton" data-toggle="dropdown"
+                                       aria-haspopup="true" aria-expanded="false"></i>
+                                    <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a className="dropdown-item" onClick={this.setSortByTitle}>Sort By Title</a>
+                                        <a className="dropdown-item" onClick={this.setSortByLastModified}>Sort By Last
+                                            Modified</a>
+                                        <a className="dropdown-item" onClick={this.setSortByLastOpened}>Sort By Last
+                                            Opened</a>
+                                    </div>
                                 </div>
-                            </div>
-                        </th>
-                    </tr>
-                    </thead>
-                    <thead>
-                    <tr>
-                        <th colSpan="3"><input id="newCourse" className="form-control" type="text"
-                                               placeholder="New Course Title" ref={this.myRef}
-                                               onChange={this.titleChange} onFocus={this.removeError}/>
+                            </th>
+                        </tr>
+                        </thead>
+                        <thead>
+                        <tr>
+                            <th colSpan="3"><input id="newCourse" className="form-control" type="text"
+                                                   placeholder="New Course Title" ref={this.myRef}
+                                                   onChange={this.titleChange} onFocus={this.removeError}/>
 
-                        </th>
-                        <th><i className="btn fa-2x fa fa-plus " title="Create"
-                               style={{color: 'white', background: 'red', marginLeft: "6px", borderRadius: "50px"}}
-                               onClick={this.createCourse}></i>
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {this.courseRow()}
-                    </tbody>
-                </table>
+                            </th>
+                            <th><i className="btn btn-dark  fa-2x fa fa-plus " title="Create"
+                                   style={{color: 'white', marginLeft: "6px"}}
+                                   onClick={this.createCourse}></i>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {this.courseRow()}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            </div>
-
 
 
         )

@@ -22,6 +22,7 @@ class TopicPills extends React.Component {
         };
         this.topicService = TopicServiceClient.instance;
         this.myRef = React.createRef();
+        this.myForm = React.createRef();
         this.textAreaRef=React.createRef();
         this.setCourseId = this.setCourseId.bind(this);
         this.setModuleId = this.setModuleId.bind(this);
@@ -34,11 +35,13 @@ class TopicPills extends React.Component {
         this.removeError = this.removeError.bind(this);
         this.toggleShowContent= this.toggleShowContent.bind(this);
         this.findAllTopicsForLesson = this.findAllTopicsForLesson.bind(this);
+        this.showAddTopicForm = this.showAddTopicForm.bind(this);
+
     }
 
 
     componentWillReceiveProps(props) {
-        console.log("asdsadasdasdasdas");
+
         this.setCourseId(props.courseId);
         this.setModuleId(props.moduleId);
         this.setLessonId(props.lessonId);
@@ -96,6 +99,10 @@ class TopicPills extends React.Component {
                     this.myRef.current.value='';
                     this.textAreaRef.current.value='';
                     this.findAllTopicsForLesson();
+                    var form=document.getElementById('myForm');
+                    form.classList.remove('d-block');
+                    var addBtn=document.getElementById('firstAdd');
+                    addBtn.classList.remove('d-none');
                 });
         }
         else {
@@ -110,8 +117,8 @@ class TopicPills extends React.Component {
         });
     }
 
-    editTopic(id) {
-        this.topicService.deleteTopic(id).then(() => {
+    editTopic(topic,id) {
+        this.topicService.updateTopic(id,topic).then(() => {
             this.findAllTopicsForLesson();
         });
     }
@@ -132,12 +139,12 @@ class TopicPills extends React.Component {
 
         var topics=this.state.topics;
         var topicsList=[];
-        console.log('sdssdsssss');
         for(var m in topics){
             console.log(this.state.showContent.id);
-            if(this.state.showContent!=null && this.state.showContent!={} && topics[m].id==this.state.showContent.id){
-
-                topicsList.push(<TopicPillsContent key={topics[m].id} content={topics[m].content} />)
+            if(this.state.showContent!=null && this.state.showContent!={}  && topics[m].id==this.state.showContent.id){
+                var div=document.getElementById("contentDiv");
+                div.classList.add('d-block');
+                topicsList.push(<TopicPillsContent key={topics[m].id} topicId={topics[m].id}  topic={topics[m]} editItem={this.editTopic} />)
             }
         }
 
@@ -151,6 +158,24 @@ class TopicPills extends React.Component {
 
     }
 
+    showAddTopicForm(){
+        var div=document.getElementById("contentDiv");
+        div.classList.remove('d-block');
+        div.classList.add('d-none');
+        var form=document.getElementById('myForm');
+        form.classList.add('d-block');
+        var addBtn=document.getElementById('firstAdd');
+        addBtn.classList.add('d-none');
+
+    }
+
+    hideAddTopic(){
+        var form=document.getElementById('myForm');
+        form.classList.remove('d-block');
+        var addBtn=document.getElementById('firstAdd');
+        addBtn.classList.remove('d-none');
+    }
+
     render() {
         console.log('in topic pills');
         return (
@@ -158,29 +183,37 @@ class TopicPills extends React.Component {
                 <AlertDiv alertMessage={this.state.alertMessage} display={this.state.alertDisplay}
                           class={this.state.alertClass}/>
 
-                <form className="form-inline"  >
-                    <input className="form-control w-75" placeholder="New Topic Name"
-                           onChange={this.titleChange} onFocus={this.removeError} ref={this.myRef}/>
-                    <i className="btn fa-2x fa fa-plus pl-4" title="Add"
-                       style={{ color:'black'}} onClick={this.createTopic}></i>
-                    <div className="input-group w-100">
-                        <div className="input-group-prepend">
-                            <span className="input-group-text">Topic content</span>
-                        </div>
-                        <textarea className="form-control" onChange={this.contentChange} onFocus={this.removeError}
-                                  ref={this.textAreaRef} aria-label="With textarea"></textarea>
-                    </div>
-                </form>
-                <ul className="nav nav-pills mb-3" role="tablist">
+                <ul className="nav nav-pills p-0 pt-5">
                     {this.renderTopicPillItems()}
+                    <li className="nav-item p-0 pr-3">
+                        <i className="btn btn-danger fa-2x fa fa-plus ml-4" id="firstAdd" title="Add a topic"
+                           style={{ color:'white'}} onClick={this.showAddTopicForm}></i>
+                    </li>
 
                 </ul>
-                <div className="tab-content" id="pills-tabContent">
+                <div >
+                    <form className="form-inline d-none" id="myForm" ref={this.myForm} >
+                        <input className="form-control w-75" placeholder="New Topic Name"
+                               onChange={this.titleChange} onFocus={this.removeError} ref={this.myRef}/>
+                        <i className="btn btn-success fa-2x fa fa-plus ml-4"  title="Add"
+                           style={{ color:'white'}} onClick={this.createTopic}></i>
+                        <i className="btn btn-danger fa-2x fa fa-times m-4" title="Cancel"
+                           style={{ color:'white'}} onClick={this.hideAddTopic}></i>
+                        <div className="input-group w-100">
+                            <div className="input-group-prepend">
+                                <span className="input-group-text">Topic content</span>
+                            </div>
+                            <textarea className="form-control" onChange={this.contentChange} onFocus={this.removeError}
+                                      ref={this.textAreaRef} aria-label="With textarea"></textarea>
+                        </div>
+                    </form>
+
+                    {/*//<Route path="" > </Route>*/}
+                    <div  className="d-none" id="contentDiv">
                     {this.showContentDiv()}
+                    </div>
                 </div>
-
-            </div>
-
+                </div>
         );
     }
 }

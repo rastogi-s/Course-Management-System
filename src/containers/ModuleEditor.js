@@ -57,7 +57,7 @@ class ModuleEditor extends React.Component {
                 {this.renderLessonTabs()}
                 <div >
                     <Route path="/course/:courseId/edit/module/:moduleId/edit/lesson/:lessonId"
-                           component={LessonEditor}  />
+                           component={LessonEditor}  ></Route>
                 </div>
             </div>
 

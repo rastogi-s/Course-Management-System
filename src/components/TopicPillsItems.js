@@ -7,8 +7,8 @@ class TopicPillsItems extends React.Component {
 
         return (
 
-            <li className="nav-item">
-                <span className="btn nav-link" >
+            <li className="nav-item p-0 pr-3">
+                <span className="btn nav-link btn-primary" >
                 <a  onClick={() => {this.props.toggleContent(this.props.topic.id)}}
                 >{this.props.topic.title}</a>
                 <i className="btn fa-1x fa fa-trash py-1 ml-2  float-right" title="Delete Lesson"

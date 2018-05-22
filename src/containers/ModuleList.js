@@ -31,18 +31,19 @@ class ModuleList extends React.Component {
 
     componentDidMount() {
         this.setCourseId(this.props.courseId);
-        this.findAllModulesForCourse();
-
     }
 
-    componentWillReceiveProps() {
-        this.setCourseId(this.props.courseId);
+    componentWillReceiveProps(newProps) {
+        this.setCourseId(newProps.courseId);
         this.findAllModulesForCourse();
 
     }
 
 
     findAllModulesForCourse() {
+        console.log('ddddd');
+        console.log(this.props.courseId);
+        if(this.props.courseId!=null && this.props.courseId!="")
         this.moduleService.findAllModulesForCourse(this.props.courseId).then((modules) => {
             this.setState({modules: modules});
         });
@@ -126,11 +127,11 @@ class ModuleList extends React.Component {
                 <form className="form-inline"  >
                     <input className="form-control w-75" placeholder="New Module Name"
                            onChange={this.titleChange} onFocus={this.removeError} ref={this.myRef}/>
-                    <i className="btn fa-2x fa fa-plus pl-4" title="Add"
+                    <i className="btn btn-danger fa-2x fa fa-plus ml-4" title="Add"
                        style={{ color:'white'}} onClick={this.createModule}></i>
                 </form>
 
-                <div className="list-group" id="myList" role="tablist">
+                <div className="list-group mt-5" id="myList" role="tablist">
                     {this.renderModuleListItem()}
                 </div>
             </div>
