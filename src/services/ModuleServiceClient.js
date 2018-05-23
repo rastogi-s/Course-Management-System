@@ -65,7 +65,7 @@ class ModuleServiceClient {
         });
     }
 
-    updateCourse(moduleId,module) {
+    updateModule(moduleId,module,callback) {
         return fetch(MODULE_API_URL + '/' + moduleId,
             {
                 body: JSON.stringify(module),
@@ -77,7 +77,7 @@ class ModuleServiceClient {
             if(response.headers.get("content-type")!=null)
                 return response.json();
             else return null;
-        });
+        }).then(callback);
     }
 
 

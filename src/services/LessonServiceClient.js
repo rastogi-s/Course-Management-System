@@ -45,7 +45,7 @@ class LessonServiceClient {
 
     }
 
-    findLessonById(lessonId) {
+    findLessonById(lessonId,callback) {
         return fetch(LESSON_API_URL + '/' + lessonId,
             {
                 method: 'GET'
@@ -53,7 +53,7 @@ class LessonServiceClient {
             if(response.headers.get("content-type")!=null)
                 return response.json();
             else return null;
-        });
+        }).then(callback);
     }
 
     findAllLessonsForModule(courseId,moduleId) {
@@ -67,7 +67,7 @@ class LessonServiceClient {
         });
     }
 
-    updateLesson(lessonId,lesson) {
+    updateLesson(lessonId,lesson,callback) {
         return fetch(LESSON_API_URL + '/' + lessonId,
             {
                 body: JSON.stringify(lesson),
@@ -79,9 +79,8 @@ class LessonServiceClient {
             if(response.headers.get("content-type")!=null)
                 return response.json();
             else return null;
-        });
+        }).then(callback);
     }
-
 
 
 }

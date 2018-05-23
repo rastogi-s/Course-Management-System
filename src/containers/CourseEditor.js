@@ -10,10 +10,14 @@ class CourseEditor extends React.Component {
         super(props);
         this.selectCourse = this.selectCourse.bind(this);
         this.courseService = CourseServiceClient.instance;
+        this.titleChange=this.titleChange.bind(this);
         this.populateTitle = this.populateTitle.bind(this);
+        this.updateCourseDetails = this.updateCourseDetails.bind(this);
+        this.editCourse = this.editCourse.bind(this);
         this.state = {
             courseId:'',
-            course: {}
+            course: {},
+            updateCourse:{}
         };
     }
 
@@ -26,7 +30,17 @@ class CourseEditor extends React.Component {
         (newProps.match.params.courseId);
     }
 
+    updateCourseDetails(){
+        //console.log(this.state.updateCourse);
+        this.courseService.updateCourse(this.state.courseId,this.state.updateCourse ,this.populateTitle);
+    }
 
+    editCourse(){
+
+        document.getElementById('form1').style.display="";
+        document.getElementById('title').style.display='none';
+
+    }
 
     selectCourse(courseId) {
         //console.log('in course editor select course');
@@ -38,7 +52,11 @@ class CourseEditor extends React.Component {
 
     populateTitle(course) {
         //console.log('in course editor populate title');
+        //console.log(course);
         this.setState({course: course});
+        document.getElementById('form1').style.display="none";
+        document.getElementById('title').style.display='';
+        console.log(this.state.course);
 
     }
 
@@ -48,6 +66,12 @@ class CourseEditor extends React.Component {
         return <ModuleList key={this.state.courseId} courseId={this.state.courseId} modules={modules}/>
     }
 
+    titleChange(event) {
+        console.log(event.target.value);
+        var date = new Date();
+        this.setState({updateCourse: {title: event.target.value, modified: date.getTime()}});
+    }
+
 
     render() {
 
@@ -55,8 +79,16 @@ class CourseEditor extends React.Component {
         return (
             <div>
                 <nav className="navbar navbar-dark fixed-top bg-dark">
-                    <a className="navbar-brand" href="#"><h1
+                    <a className="navbar-brand" id='title' href="#"><h1
                         style={{fontFamily: 'Serif', color: 'white'}}>{this.state.course.title}</h1></a>
+                    <form className="form-inline navbar-brand" style={{display:'none'}} id='form1'>
+                    <input type="text" className="form-control"  defaultValue={this.state.course.title}
+                           onChange={this.titleChange}/>
+                    <i className="btn fa-2x fa fa-check" title="Update Course Name"
+                       style={{color: 'white', borderRadius: "50px"}} onClick={this.updateCourseDetails} ></i>
+                    </form>
+                    <i className="btn fa-2x fa fa-pencil ml-auto" title="Edit Course Name"
+                       style={{color: 'white', borderRadius: "50px"}} onClick={this.editCourse}></i>
                     <Link to={`/course/list`}>
                         <i className="btn fa-2x fa fa-times" title="Close"
                            style={{color: 'white', borderRadius: "50px"}}></i>

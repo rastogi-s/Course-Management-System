@@ -124,16 +124,12 @@ class LessonTabs extends React.Component {
         return (
 
             <div>
-                <nav className="navbar navbar-dark bg-dark mb-3" style={{borderRadius: 5}}>
-                    <a className="navbar-brand"
-                       style={{fontFamily: 'Ariel', fontSize: "x-large", color: 'white'}}>{this.props.module.title}</a>
-                    <form className="form-inline">
-                        <input className="form-control w-75" placeholder="New Lesson Name"
-                               onChange={this.titleChange} ref={this.myRef}/>
-                        <i className="btn fa-2x fa fa-plus pl-4" title="Add"
-                           style={{color: 'white'}} onClick={this.createLesson}></i>
-                    </form>
-                </nav>
+                <form className="form-inline mb-4">
+                    <input className="form-control" placeholder="New Lesson Name"
+                           onChange={this.titleChange} ref={this.myRef}/>
+                    <i className="btn fa-2x fa fa-plus pl-4 " title="Add"
+                       style={{color: 'white'}} onClick={this.createLesson}></i>
+                </form>
                 <ul className="nav nav-tabs " id="myTab" role="tablist">
                     {this.renderLessonTabsItem()}
                 </ul>

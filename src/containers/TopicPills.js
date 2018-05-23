@@ -168,7 +168,7 @@ class TopicPills extends React.Component {
         console.log('in topic pills');
         return (
             <div>
-                <ul className="nav nav-pills p-0 pt-5">
+                <ul className="nav nav-pills p-0 pt-3">
                     {this.renderTopicPillItems()}
                     <li className="nav-item p-0 pr-3">
                         <i className="btn btn-danger fa-2x fa fa-plus ml-4" id="firstAdd" title="Add a topic"

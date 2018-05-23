@@ -11,11 +11,15 @@ class LessonEditor extends React.Component {
         this.lessonService = LessonServiceClient.instance;
         this.populate = this.populate.bind(this);
         this.renderTopicPills=this.renderTopicPills.bind(this);
+        this.updateLessonDetails = this.updateLessonDetails.bind(this);
+        this.titleChange = this.titleChange.bind(this);
         this.state = {
             courseId:'',
             moduleId:'',
             lessonId:'',
-            topic:{}
+            topic:{},
+            lesson:{},
+            updateLesson:{}
         };
     }
 
@@ -50,6 +54,8 @@ class LessonEditor extends React.Component {
 
     populate(lesson) {
         this.setState({lesson: lesson});
+        document.getElementById('form3').style.display="none";
+        document.getElementById('title3').style.display='';
     }
 
     renderTopicPills() {
@@ -59,9 +65,38 @@ class LessonEditor extends React.Component {
                            lessonId={this.state.lessonId} />
     }
 
+    titleChange(event) {
+        console.log(event.target.value);
+        this.setState({updateLesson: {title: event.target.value}});
+    }
+
+    updateLessonDetails(){
+        //console.log(this.state.updateCourse);
+        this.lessonService.updateLesson(this.state.lessonId,this.state.updateLesson ,this.populate);
+    }
+
+    editModule(){
+
+        document.getElementById('form3').style.display="";
+        document.getElementById('title3').style.display='none';
+
+    }
+
     render() {
         return (
-            <div >
+            <div className="mt-5" >
+                <nav className="navbar navbar-dark bg-dark mb-3" style={{borderRadius: 5}}>
+                    <a className="navbar-brand"
+                       style={{fontFamily: 'Ariel', fontSize: "x-large", color: 'white'}} id='title3'>{this.state.lesson.title}</a>
+                    <form className="form-inline navbar-brand" style={{display:'none'}} id='form3'>
+                        <input type="text" className="form-control"  defaultValue={this.state.lesson.title}
+                               onChange={this.titleChange}/>
+                        <i className="btn fa-2x fa fa-check" title="Update Module Name"
+                           style={{color: 'white', borderRadius: "50px"}} onClick={this.updateLessonDetails} ></i>
+                    </form>
+                    <i className="btn fa-2x fa fa-pencil ml-auto" title="Edit Module Name"
+                       style={{color: 'white', borderRadius: "50px"}} onClick={this.editModule}></i>
+                </nav>
                 {this.renderTopicPills()}
             </div>
         );

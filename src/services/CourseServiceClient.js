@@ -68,7 +68,7 @@ class CourseServiceClient {
                 return response.json();
             else return null;
             //return response.json();
-        });
+        }).then(callback);
     }
 
 

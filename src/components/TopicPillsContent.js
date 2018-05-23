@@ -10,6 +10,7 @@ class TopicPillsContent extends React.Component {
 
         this.modifyContent = this.modifyContent.bind(this);
         this.textContentChange = this.textContentChange.bind(this);
+        this.textTitleChange = this.textTitleChange.bind(this);
         this.setTopic=this.setTopic.bind(this);
     }
 
@@ -17,6 +18,8 @@ class TopicPillsContent extends React.Component {
         console.log('aaaaaaaaaaaaaadfsdfsd');
         this.setTopic(props.topic,props.topicId);
         document.getElementById("content").setAttribute('disabled','true');
+        document.getElementById("topicTitle").setAttribute('disabled','true');
+
 
 
     }
@@ -27,8 +30,9 @@ class TopicPillsContent extends React.Component {
     }
 
     modifyContent() {
-        console.log("in bebebe");
+
         document.getElementById("content").removeAttribute("disabled");
+        document.getElementById("topicTitle").removeAttribute("disabled");
 
     }
 
@@ -39,7 +43,12 @@ class TopicPillsContent extends React.Component {
 
     textContentChange(event) {
 
-        this.setState({topic:{content:event.target.value}});
+        this.setState({topic:{title:this.state.topic.title,content:event.target.value}});
+    }
+
+    textTitleChange(event) {
+
+        this.setState({topic:{title:event.target.value,content:this.state.topic.content}});
     }
 
     render() {
@@ -55,6 +64,13 @@ class TopicPillsContent extends React.Component {
                        style={{color: 'white'}} onClick={() => {
                         this.props.editItem(this.state.topic,this.state.topicId)
                     }}></i>
+                </div>
+                <div className="input-group input-group-lg w-50 mb-3" id="dispTitleDiv">
+                    <div className="input-group-prepend">
+                        <span className="input-group-text bg-dark text-light" >Topic Name</span>
+                    </div>
+                    <input className="form-control" disabled id="content"  id="topicTitle" aria-label="With textarea"
+                           onChange={this.textTitleChange} defaultValue={this.props.topic.title}/>
                 </div>
 
                 <div className="input-group input-group-lg " id="dispContDiv">

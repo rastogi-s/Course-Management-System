@@ -101,14 +101,18 @@ class ModuleList extends React.Component {
 
         return (
             <div>
-                <form className="form-inline">
-                    <input className="form-control w-75" placeholder="New Module Name"
-                           onChange={this.titleChange} ref={this.myRef}/>
-                    <i className="btn btn-danger fa-2x fa fa-plus ml-4" title="Add"
-                       style={{color: 'white'}} onClick={this.createModule}></i>
-                </form>
 
-                <div className="list-group mt-5" id="myList" role="tablist">
+
+                <div className="list-group " id="myList" role="tablist">
+                    <span className="list-group-item list-group-item-action mb-5" style={{borderRadius:7,background:'lightgrey'}}
+                          role="tab">
+                        <form className="form-inline">
+                    <input className="form-control" placeholder="New Module Name"
+                           onChange={this.titleChange} ref={this.myRef}/>
+                    <i className="btn float-right fa-2x fa fa-plus ml-auto p-0" title="Add"
+                       style={{color: 'black'}} onClick={this.createModule}></i>
+                </form>
+                    </span>
                     {this.renderModuleListItem()}
                 </div>
             </div>
