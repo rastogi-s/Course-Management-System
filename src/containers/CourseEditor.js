@@ -55,20 +55,12 @@ class CourseEditor extends React.Component {
         return (
             <div>
                 <nav className="navbar navbar-dark fixed-top bg-dark">
+                    <a className="navbar-brand" href="#"><h1
+                        style={{fontFamily: 'Serif', color: 'white'}}>{this.state.course.title}</h1></a>
                     <Link to={`/course/list`}>
                         <i className="btn fa-2x fa fa-times" title="Close"
                            style={{color: 'white', borderRadius: "50px"}}></i>
                     </Link>
-
-                    <a className="navbar-brand" href="#"><h1
-                        style={{fontFamily: 'Serif', color: 'white'}}>{this.state.course.title}</h1></a>
-                    <a className="navbar-brand" href="">Build</a>
-                    <a className="navbar-brand" href="">Pages</a>
-                    <a className="navbar-brand" href="">Theme</a>
-                    <a className="navbar-brand" href="">Store</a>
-                    <a className="navbar-brand" href="">Apps</a>
-                    <a className="navbar-brand" href="">Setting</a>
-
 
                 </nav>
                 <div   style={{

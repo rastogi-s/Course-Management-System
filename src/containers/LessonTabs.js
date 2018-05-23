@@ -1,7 +1,6 @@
 import React from 'react';
 import LessonTabsItem from './../components/LessonTabsItem';
 import LessonServiceClient from './../services/LessonServiceClient';
-import AlertDiv from './../components/AlertDiv';
 
 class LessonTabs extends React.Component {
 
@@ -10,12 +9,9 @@ class LessonTabs extends React.Component {
         this.state = {
             courseId: '',
             module: {},
-            lessons:[],
-            lesson:{},
-            alertMessage: '',
-            alertDisplay: 'none',
-            alertClass: '',
-            moduleId:''
+            lessons: [],
+            lesson: {},
+            moduleId: ''
         };
         this.lessonService = LessonServiceClient.instance;
         this.myRef = React.createRef();
@@ -25,7 +21,6 @@ class LessonTabs extends React.Component {
         this.deleteLesson = this.deleteLesson.bind(this);
         this.createLesson = this.createLesson.bind(this);
         this.titleChange = this.titleChange.bind(this);
-        this.removeError = this.removeError.bind(this);
         //this.findAllLessonsForModule = this.findAllLessonsForModule.bind(this);
     }
 
@@ -43,7 +38,7 @@ class LessonTabs extends React.Component {
         this.setCourseId(props.courseId);
         this.setModule(props.module);
         this.setModuleId(props.moduleId);
-        if(props.courseId!=null && props.courseId!='' && props.moduleId!=null && props.moduleId!='' )
+        if (props.courseId != null && props.courseId != '' && props.moduleId != null && props.moduleId != '')
             this.findAllLessonsForModule();
     }
 
@@ -57,12 +52,12 @@ class LessonTabs extends React.Component {
 
     setModule(module) {
         this.setState({module: module});
-        this.setState({lessons:module.lessons});
+        this.setState({lessons: module.lessons});
     }
 
     findAllLessonsForModule() {
 
-        this.lessonService.findAllLessonsForModule(this.state.courseId,this.state.moduleId).then((lessons) => {
+        this.lessonService.findAllLessonsForModule(this.state.courseId, this.state.moduleId).then((lessons) => {
             this.setState({lessons: lessons});
         });
     }
@@ -71,57 +66,54 @@ class LessonTabs extends React.Component {
         this.setState({lesson: {title: event.target.value}});
     }
 
-    removeError() {
-        this.setState({alertMessage: '', alertDisplay: 'none'});
-    }
 
     createLesson() {
-        if (this.state.lesson.title != null && this.state.lesson.title != '') {
 
-            this.lessonService
-                .createLesson(this.state.courseId,this.state.moduleId,this.state.lesson)
-                .then(() => {
-                    this.setState({
-                        alertMessage: 'Lesson created successfully!!',
-                        alertDisplay: 'block',
-                        alertClass: 'alert-success',
-                        lesson: {title: ''}
-                    });
-                    this.myRef.current.value='';
-                    this.findAllLessonsForModule();
+        var lesson = this.state.lesson;
+        if (lesson.title === undefined || lesson.title === '') {
+            lesson = {title: 'New Lesson'};
+        }
+
+        this.lessonService
+            .createLesson(this.state.courseId, this.state.moduleId, lesson)
+            .then(() => {
+                this.setState({
+
+                    lesson: {title: ''}
                 });
-        }
-        else {
-            console.log('title empty');
+                this.myRef.current.value = '';
+                this.findAllLessonsForModule();
+            });
 
-            this.setState({alertMessage: 'Title for lesson is required', alertDisplay: 'block', alertClass: 'alert-danger'});
-        }
     }
 
     deleteLesson(id) {
         this.lessonService.deleteLesson(id).then(() => {
-            var loc=window.location.href;
-            if(loc.indexOf("lesson")!=-1){
+            var loc = window.location.href;
+            if (loc.indexOf("lesson") != -1) {
 
-            var newLoc=loc.substring(0,loc.indexOf("lesson")-2);
-            console.log(loc);
-            console.log(newLoc);
-                window.location.href=newLoc;
-                }
-            else{this.findAllLessonsForModule();}
+                var newLoc = loc.substring(0, loc.indexOf("lesson") - 2);
+                console.log(loc);
+                console.log(newLoc);
+                window.location.href = newLoc;
+            }
+            else {
+                this.findAllLessonsForModule();
+            }
 
 
         });
     }
 
 
-    renderLessonTabsItem(){
-        var lessons=this.state.lessons;
-        var lessonList=[];
-        for(var m in lessons) {
+    renderLessonTabsItem() {
+        var lessons = this.state.lessons;
+        var lessonList = [];
+        for (var m in lessons) {
 
             lessonList.push(<LessonTabsItem key={lessons[m].id} lesson={lessons[m]}
-                                            courseId={this.state.courseId} moduleId={this.state.moduleId} deleteItem={this.deleteLesson}/>);
+                                            courseId={this.state.courseId} moduleId={this.state.moduleId}
+                                            deleteItem={this.deleteLesson}/>);
         }
         return lessonList;
     }
@@ -132,15 +124,14 @@ class LessonTabs extends React.Component {
         return (
 
             <div>
-                <AlertDiv alertMessage={this.state.alertMessage} display={this.state.alertDisplay}
-                          class={this.state.alertClass}/>
-                <nav className="navbar navbar-dark bg-dark mb-3" style={{borderRadius:5}}>
-                    <a className="navbar-brand"  style={{fontFamily:'Ariel',fontSize:"x-large",color:'white'}}>{this.props.module.title}</a>
-                    <form className="form-inline"  >
+                <nav className="navbar navbar-dark bg-dark mb-3" style={{borderRadius: 5}}>
+                    <a className="navbar-brand"
+                       style={{fontFamily: 'Ariel', fontSize: "x-large", color: 'white'}}>{this.props.module.title}</a>
+                    <form className="form-inline">
                         <input className="form-control w-75" placeholder="New Lesson Name"
-                               onChange={this.titleChange} onFocus={this.removeError} ref={this.myRef}/>
+                               onChange={this.titleChange} ref={this.myRef}/>
                         <i className="btn fa-2x fa fa-plus pl-4" title="Add"
-                           style={{ color:'white'}} onClick={this.createLesson}></i>
+                           style={{color: 'white'}} onClick={this.createLesson}></i>
                     </form>
                 </nav>
                 <ul className="nav nav-tabs " id="myTab" role="tablist">

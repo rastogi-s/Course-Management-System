@@ -62,7 +62,7 @@ class TopicPillsContent extends React.Component {
                         <span className="input-group-text bg-dark text-light" >Content for the Topic</span>
                     </div>
                     <textarea className="form-control" disabled id="content" aria-label="With textarea"
-                              onChange={this.textContentChange}>{this.props.topic.content}</textarea>
+                              onChange={this.textContentChange} defaultValue={this.props.topic.content}></textarea>
                 </div>
 
             </div>

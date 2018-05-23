@@ -1,12 +1,8 @@
 import React from 'react';
-//import ReactDOM, {render} from 'react-dom';
 import CourseRow from './../components/CourseRow';
 import EmptyRow from './../components/EmptyRow';
-import AlertDiv from './../components/AlertDiv';
-import CourseServiceClient from './../services/CourseServiceClient'
-// import {DropdownButton} from 'react-bootstrap';
-// import {MenuItem} from 'react-bootstrap';
-
+import CourseServiceClient from './../services/CourseServiceClient';
+import {Link} from 'react-router-dom'
 
 class CourseList extends React.Component {
 
@@ -17,15 +13,11 @@ class CourseList extends React.Component {
         this.state = {
             courses: [],
             course: {},
-            alertMessage: '',
-            alertDisplay: 'none',
-            alertClass: '',
             sortType: 'modified'
         };
         this.deleteCourse = this.deleteCourse.bind(this);
         this.createCourse = this.createCourse.bind(this);
         this.titleChange = this.titleChange.bind(this);
-        this.removeError = this.removeError.bind(this);
         this.setSortByTitle = this.setSortByTitle.bind(this);
         this.setSortByLastModified = this.setSortByLastModified.bind(this);
         this.setSortByLastOpened = this.setSortByLastOpened.bind(this);
@@ -74,7 +66,7 @@ class CourseList extends React.Component {
             if (p['title'].toLowerCase() > q['title'].toLowerCase())
                 return 1;
             else if (p['title'].toLowerCase() < q['title'].toLowerCase())
-                return 1;
+                return -1;
             else
                 return 0;
         });
@@ -96,7 +88,6 @@ class CourseList extends React.Component {
 
             }
             this.setState({courses: courses});
-            //console.log(this.state.courses);
         });
     }
 
@@ -113,10 +104,20 @@ class CourseList extends React.Component {
             date.getMonth() === today.getMonth() &&
             date.getFullYear() === today.getFullYear()) {
             //console.log("todays date:" + date);
-            if (date.getHours() < 12)
-                returnDate = date.getHours() + ':' + date.getMinutes() + ' AM';
-            else
-                returnDate = date.getHours() - 12 + ':' + date.getMinutes() + ' PM';
+            if (date.getHours() < 12) {
+                var min=date.getMinutes();
+                if(min<10)
+                    returnDate = date.getHours() + ':' + '0'+date.getMinutes() + ' AM';
+                else
+                    returnDate = date.getHours() + ':' + date.getMinutes() + ' AM';
+            }
+            else {
+                var min=date.getMinutes();
+                if(min<10)
+                    returnDate = date.getHours()- 12 + ':' + '0'+date.getMinutes() + ' PM';
+                else
+                    returnDate = date.getHours()- 12 + ':' + date.getMinutes() + ' PM';
+            }
         }
         else {
 
@@ -145,7 +146,7 @@ class CourseList extends React.Component {
                     rows.push(<CourseRow course={courses[c]} key={courses[c].id} deleteRow={this.deleteCourse}/>);
                 }
             }
-        }else{
+        } else {
 
             for (var c in courses) {
                 rows.push(<CourseRow course={courses[c]} key={courses[c].id} deleteRow={this.deleteCourse}/>);
@@ -219,7 +220,6 @@ class CourseList extends React.Component {
 
         }
 
-        //console.log("newJson");
         console.log(newJson);
 
         return newJson;
@@ -228,25 +228,21 @@ class CourseList extends React.Component {
 
 
     createCourse() {
-        console.log(this.state.course.title);
-        if (this.state.course.title != null && this.state.course.title != '') {
-            this.courseService
-                .createCourse(this.state.course)
-                .then(() => {
-                    this.setState({
-                        alertMessage: 'Course created successfully!!',
-                        alertDisplay: 'block',
-                        alertClass: 'alert-success',
-                        course: {title: ''}
-                    });
-                    this.myRef.current.value = '';
-                    this.findAllCourses();
+        console.log(this.state.course.toString());
+        var course = this.state.course;
+        if (course.title === undefined || course.title === '') {
+            var date = new Date();
+            course = {title: 'New Course', created: date.getTime(), modified: date.getTime()};
+        }
+        this.courseService
+            .createCourse(course)
+            .then(() => {
+                this.setState({
+                    course: {title: ''}
                 });
-        }
-        else {
-            console.log('title empty');
-            this.setState({alertMessage: 'Title is required', alertDisplay: 'block', alertClass: 'alert-danger'});
-        }
+                this.myRef.current.value = '';
+                this.findAllCourses();
+            });
 
     }
 
@@ -256,18 +252,29 @@ class CourseList extends React.Component {
         this.setState({course: {title: event.target.value, created: date.getTime(), modified: date.getTime()}});
     }
 
-    removeError() {
-        this.setState({alertMessage: '', alertDisplay: 'none'});
-    }
-
 
     render() {
-
-
+        const link = (<Link to={`/course/grid`}><i className="btn fa-1x fa fa-th " title="grid"
+                                                   style={{color: 'black'}}></i></Link>);
         return (
             <div>
-                <nav className="navbar navbar-dark  fixed-top bg-dark">
-                    <a className="navbar-brand" href="#"><h1 style={{fontFamily: 'Serif'}}>Course Manager</h1></a>
+                <nav className="navbar navbar-dark fixed-top bg-dark">
+                    <div className="dropdown">
+                        <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span className="navbar-toggler-icon"></span>
+                        </button>
+                        <div className="dropdown-menu" aria-labelledby="dropdownMenu2">
+                            <button className="dropdown-item" type="button">Action</button>
+                            <button className="dropdown-item" type="button">Another action</button>
+                            <button className="dropdown-item" type="button">Something else here</button>
+                        </div>
+                    </div>
+
+                    <a className="navbar-brand mr-auto" href="#"><h1
+                        style={{fontFamily: 'Serif', paddingLeft: 20, paddingTop: 7}}>Course
+                        Manager</h1></a>
+
                     <form className="form-inline">
                         <input className="form-control mr-sm-2" type="search" placeholder="Search Course"
                                aria-label="Search" required/>
@@ -277,27 +284,25 @@ class CourseList extends React.Component {
                 </nav>
 
                 <div style={{
-                    paddingTop: "5rem",
+                    paddingTop: "5.5rem",
                     paddingBottom: "5rem",
                     color: "5a5a5a"
                 }} className="container">
-                    <AlertDiv alertMessage={this.state.alertMessage} display={this.state.alertDisplay}
-                              class={this.state.alertClass}/>
+
                     <table className="table">
                         <thead>
                         <tr>
                             <th>Title</th>
                             <th><select style={{background: 'lightgrey', border: 'none', fontWeight: 'bold'}}>
                                 <option>Owned By Me</option>
-                                <option>Owned By Others</option>
-                                <option>Owned By Anyone</option>
+                                {/*<option>Owned By Others</option>*/}
+                                {/*<option>Owned By Anyone</option>*/}
                             </select>
                             </th>
                             <th>Last Modified</th>
                             <th style={{whiteSpace: "nowrap"}}>
                                 <div className="dropdown">
-                                    <i className="btn fa-1x fa fa-th " title="grid"
-                                       style={{color: 'black'}}></i>
+                                    {link}
                                     <i className="btn fa-1x fa dropdown-toggle" title="Sort"
                                        style={{color: 'black'}} id="dropdownMenuButton" data-toggle="dropdown"
                                        aria-haspopup="true" aria-expanded="false"></i>
@@ -305,8 +310,6 @@ class CourseList extends React.Component {
                                         <a className="dropdown-item" onClick={this.setSortByTitle}>Sort By Title</a>
                                         <a className="dropdown-item" onClick={this.setSortByLastModified}>Sort By Last
                                             Modified</a>
-                                        <a className="dropdown-item" onClick={this.setSortByLastOpened}>Sort By Last
-                                            Opened</a>
                                     </div>
                                 </div>
                             </th>
@@ -316,7 +319,7 @@ class CourseList extends React.Component {
                         <tr>
                             <th colSpan="3"><input id="newCourse" className="form-control" type="text"
                                                    placeholder="New Course Title" ref={this.myRef}
-                                                   onChange={this.titleChange} onFocus={this.removeError}/>
+                                                   onChange={this.titleChange}/>
 
                             </th>
                             <th><i className="btn btn-dark  fa-2x fa fa-plus " title="Create"

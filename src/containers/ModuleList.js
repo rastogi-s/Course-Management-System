@@ -1,8 +1,6 @@
 import React from 'react';
 import ModuleServiceClient from "../services/ModuleServiceClient";
-import AlertDiv from './../components/AlertDiv';
 import ModuleListItem from "../components/ModuleListItem";
-import { withRouter } from 'react-router-dom';
 
 class ModuleList extends React.Component {
 
@@ -11,20 +9,14 @@ class ModuleList extends React.Component {
         this.moduleService = ModuleServiceClient.instance;
         this.myRef = React.createRef();
         this.state = {
-            courseId:'',
+            courseId: '',
             modules: [],
-            module: {},
-            alertMessage: '',
-            alertDisplay: 'none',
-            alertClass: ''
-            //sortType: 'modified'
+            module: {}
         };
         this.deleteModule = this.deleteModule.bind(this);
         this.createModule = this.createModule.bind(this);
         this.titleChange = this.titleChange.bind(this);
-        this.removeError = this.removeError.bind(this);
         this.setCourseId = this.setCourseId.bind(this);
-        // this.setModules = this.setModules.bind(this);
         this.findAllModulesForCourse = this.findAllModulesForCourse.bind(this);
 
     }
@@ -43,55 +35,46 @@ class ModuleList extends React.Component {
     findAllModulesForCourse() {
         console.log('ddddd');
         console.log(this.props.courseId);
-        if(this.props.courseId!=null && this.props.courseId!="")
-        this.moduleService.findAllModulesForCourse(this.props.courseId).then((modules) => {
-            this.setState({modules: modules});
-        });
+        if (this.props.courseId != null && this.props.courseId != "")
+            this.moduleService.findAllModulesForCourse(this.props.courseId).then((modules) => {
+                this.setState({modules: modules});
+            });
     }
 
     titleChange(event) {
         this.setState({module: {title: event.target.value}});
     }
 
-    removeError() {
-        this.setState({alertMessage: '', alertDisplay: 'none'});
-    }
-
     createModule() {
-        if (this.state.module.title != null && this.state.module.title != '') {
 
-            console.log(this.state.courseId);
-            this.moduleService
-                .createModule(this.state.courseId,this.state.module)
-                .then(() => {
-                    this.setState({
-                        alertMessage: 'Module created successfully!!',
-                        alertDisplay: 'block',
-                        alertClass: 'alert-success',
-                        module: {title: ''}
-                    });
-                    this.myRef.current.value='';
-                    this.findAllModulesForCourse();
+        var module = this.state.module;
+        if (module.title === undefined || module.title === '') {
+            module = {title: 'New Module'};
+        }
+        console.log(module);
+        this.moduleService
+            .createModule(this.state.courseId, module)
+            .then(() => {
+                this.setState({
+                    module: {title: ''}
                 });
-        }
-        else {
-            console.log('title empty');
+                this.myRef.current.value = '';
+                this.findAllModulesForCourse();
+            });
 
-            this.setState({alertMessage: 'Title is required', alertDisplay: 'block', alertClass: 'alert-danger'});
-        }
     }
 
     deleteModule(id) {
         this.moduleService.deleteModule(id).then(() => {
 
-            var loc=window.location.href;
-            var newLoc=loc.substring(0,loc.indexOf("edit")+4)
+            var loc = window.location.href;
+            var newLoc = loc.substring(0, loc.indexOf("edit") + 4)
             console.log(loc);
             console.log(newLoc);
-            if(newLoc===loc || newLoc===(loc+"/")  || (newLoc+"/")===loc )
+            if (newLoc === loc || newLoc === (loc + "/") || (newLoc + "/") === loc)
                 this.findAllModulesForCourse();
             else
-                window.location.href=newLoc;
+                window.location.href = newLoc;
 
         });
     }
@@ -101,18 +84,14 @@ class ModuleList extends React.Component {
         this.setState({courseId: courseId});
     }
 
-    // setModules(modules) {
-    //     this.setState({modules: modules});
-    // }
 
-    renderModuleListItem(){
-        var modules=this.state.modules;
-        var moduleList=[];
-        for(var m in modules) {
-            moduleList.push(<ModuleListItem key={modules[m].id} module={modules[m]} courseId={this.state.courseId} deleteItem={this.deleteModule}/>);
+    renderModuleListItem() {
+        var modules = this.state.modules;
+        var moduleList = [];
+        for (var m in modules) {
+            moduleList.push(<ModuleListItem key={modules[m].id} module={modules[m]} courseId={this.state.courseId}
+                                            deleteItem={this.deleteModule}/>);
         }
-
-       // console.log(modules);
 
         return moduleList;
 
@@ -121,14 +100,12 @@ class ModuleList extends React.Component {
     render() {
 
         return (
-            <div >
-                <AlertDiv alertMessage={this.state.alertMessage} display={this.state.alertDisplay}
-                          class={this.state.alertClass}/>
-                <form className="form-inline"  >
+            <div>
+                <form className="form-inline">
                     <input className="form-control w-75" placeholder="New Module Name"
-                           onChange={this.titleChange} onFocus={this.removeError} ref={this.myRef}/>
+                           onChange={this.titleChange} ref={this.myRef}/>
                     <i className="btn btn-danger fa-2x fa fa-plus ml-4" title="Add"
-                       style={{ color:'white'}} onClick={this.createModule}></i>
+                       style={{color: 'white'}} onClick={this.createModule}></i>
                 </form>
 
                 <div className="list-group mt-5" id="myList" role="tablist">
