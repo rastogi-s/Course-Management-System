@@ -1,6 +1,5 @@
 let _singleton = Symbol();
-const COURSE_API_URL = 'http://localhost:8080/api/course';
-const TOPIC_API_URL = 'http://localhost:8080/api/topic';
+
 
 class TopicServiceClient {
     constructor(singletonToken) {
@@ -14,8 +13,31 @@ class TopicServiceClient {
         return this[_singleton]
     }
 
+
+    createTopicUrl(){
+
+        const TOPIC_API_URL = 'http://localhost:8080/api/topic';
+
+        var url=window.location.href;
+        if(!url.toString().includes('localhost'))
+            return 'https://webdev-rastogi-shubham.herokuapp.com/api/topic';
+        else
+            return TOPIC_API_URL;
+
+    }
+
+    createCourseUrl(){
+        const COURSE_API_URL = 'http://localhost:8080/api/course';
+        var url=window.location.href;
+        if(!url.toString().includes('localhost'))
+            return 'https://webdev-rastogi-shubham.herokuapp.com/api/course';
+        else
+            return COURSE_API_URL;
+
+    }
+
     findAllLTopics() {
-        return fetch(TOPIC_API_URL)
+        return fetch(this.createTopicUrl())
             .then(function (response) {
                 if(response.headers.get("content-type")!=null)
                     return response.json();
@@ -24,7 +46,7 @@ class TopicServiceClient {
     }
 
     createTopic(courseId,moduleId,lessonId,topic) {
-        return fetch(COURSE_API_URL+'/'+courseId+'/'+'module/'+moduleId+'/lesson/'+lessonId+'/topic' ,{
+        return fetch(this.createCourseUrl()+'/'+courseId+'/'+'module/'+moduleId+'/lesson/'+lessonId+'/topic' ,{
             body: JSON.stringify(topic),
             headers: {
                 'Content-Type': 'application/json'
@@ -38,7 +60,7 @@ class TopicServiceClient {
     }
 
     deleteTopic(topicId,callback) {
-        return fetch(TOPIC_API_URL + '/' + topicId,
+        return fetch(this.createTopicUrl() + '/' + topicId,
             {
                 method: 'DELETE'
             }).then(callback);
@@ -46,7 +68,7 @@ class TopicServiceClient {
     }
 
     findTopicById(topicId) {
-        return fetch(TOPIC_API_URL + '/' + topicId,
+        return fetch(this.createTopicUrl() + '/' + topicId,
             {
                 method: 'GET'
             }).then(function (response) {
@@ -57,7 +79,7 @@ class TopicServiceClient {
     }
 
     findAllTopicsForLesson(courseId,moduleId,lessonId) {
-        return fetch(COURSE_API_URL+'/'+courseId+'/'+'module/'+moduleId+'/lesson/'+lessonId+'/topic' ,
+        return fetch(this.createCourseUrl()+'/'+courseId+'/'+'module/'+moduleId+'/lesson/'+lessonId+'/topic' ,
             {
                 method: 'GET'
             }).then(function (response) {
@@ -68,7 +90,7 @@ class TopicServiceClient {
     }
 
     updateTopic(topicId,topic) {
-        return fetch(TOPIC_API_URL + '/' + topicId,
+        return fetch(this.createTopicUrl() + '/' + topicId,
             {
                 body: JSON.stringify(topic),
                 headers: {

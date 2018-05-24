@@ -1,5 +1,5 @@
 let _singleton = Symbol();
-const COURSE_API_URL = 'http://localhost:8080/api/course';
+
 
 class CourseServiceClient {
     constructor(singletonToken) {
@@ -13,8 +13,18 @@ class CourseServiceClient {
         return this[_singleton]
     }
 
+    createUrl(){
+        const COURSE_API_URL = 'http://localhost:8080/api/course';
+        var url=window.location.href;
+        if(!url.toString().includes('localhost'))
+            return 'https://webdev-rastogi-shubham.herokuapp.com/api/course';
+        else
+          return COURSE_API_URL;
+
+    }
+
     findAllCourses() {
-        return fetch(COURSE_API_URL)
+        return fetch(this.createUrl())
             .then(function (response) {
                 if(response.headers.get("content-type")!=null)
                     return response.json();
@@ -23,7 +33,7 @@ class CourseServiceClient {
     }
 
     createCourse(course) {
-        return fetch(COURSE_API_URL, {
+        return fetch(this.createUrl(), {
             body: JSON.stringify(course),
             headers: {
                 'Content-Type': 'application/json'
@@ -37,7 +47,7 @@ class CourseServiceClient {
     }
 
     deleteCourse(courseId, callback) {
-        return fetch(COURSE_API_URL + '/' + courseId,
+        return fetch(this.createUrl() + '/' + courseId,
             {
                 method: 'DELETE'
             }).then(callback);
@@ -45,7 +55,7 @@ class CourseServiceClient {
     }
 
     findCourseById(courseId, callback) {
-        return fetch(COURSE_API_URL + '/' + courseId,
+        return fetch(this.createUrl() + '/' + courseId,
             {
                 method: 'GET'
             }).then(function (response) {
@@ -56,7 +66,7 @@ class CourseServiceClient {
     }
 
     updateCourse(courseId,course ,callback) {
-        return fetch(COURSE_API_URL + '/' + courseId,
+        return fetch(this.createUrl() + '/' + courseId,
             {
                 body: JSON.stringify(course),
                 headers: {
@@ -70,7 +80,6 @@ class CourseServiceClient {
             //return response.json();
         }).then(callback);
     }
-
 
 }
 

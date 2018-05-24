@@ -1,6 +1,4 @@
 let _singleton = Symbol();
-const COURSE_API_URL = 'http://localhost:8080/api/course';
-const LESSON_API_URL = 'http://localhost:8080/api/lesson';
 
 class LessonServiceClient {
     constructor(singletonToken) {
@@ -14,8 +12,28 @@ class LessonServiceClient {
         return this[_singleton]
     }
 
+    createLessonUrl(){
+        const LESSON_API_URL = 'http://localhost:8080/api/lesson';
+        var url=window.location.href;
+        if(!url.toString().includes('localhost'))
+            return 'https://webdev-rastogi-shubham.herokuapp.com/api/lesson';
+        else
+            return LESSON_API_URL;
+
+    }
+
+    createCourseUrl(){
+        const COURSE_API_URL = 'http://localhost:8080/api/course';
+        var url=window.location.href;
+        if(!url.toString().includes('localhost'))
+            return 'https://webdev-rastogi-shubham.herokuapp.com/api/course';
+        else
+            return COURSE_API_URL;
+
+    }
+
     findAllLessons() {
-        return fetch(LESSON_API_URL)
+        return fetch(this.createLessonUrl())
             .then(function (response) {
                 if(response.headers.get("content-type")!=null)
                     return response.json();
@@ -24,7 +42,7 @@ class LessonServiceClient {
     }
 
     createLesson(courseId,moduleId,lesson) {
-        return fetch(COURSE_API_URL+'/'+courseId+'/'+'module/'+moduleId+'/lesson' ,{
+        return fetch(this.createCourseUrl()+'/'+courseId+'/'+'module/'+moduleId+'/lesson' ,{
             body: JSON.stringify(lesson),
             headers: {
                 'Content-Type': 'application/json'
@@ -38,7 +56,7 @@ class LessonServiceClient {
     }
 
     deleteLesson(lessonId,callback) {
-        return fetch(LESSON_API_URL + '/' + lessonId,
+        return fetch(this.createLessonUrl() + '/' + lessonId,
             {
                 method: 'DELETE'
             }).then(callback);
@@ -46,7 +64,7 @@ class LessonServiceClient {
     }
 
     findLessonById(lessonId,callback) {
-        return fetch(LESSON_API_URL + '/' + lessonId,
+        return fetch(this.createLessonUrl() + '/' + lessonId,
             {
                 method: 'GET'
             }).then(function (response) {
@@ -57,7 +75,7 @@ class LessonServiceClient {
     }
 
     findAllLessonsForModule(courseId,moduleId) {
-        return fetch(COURSE_API_URL+'/'+courseId+'/'+'module/'+moduleId+'/lesson' ,
+        return fetch(this.createCourseUrl()+'/'+courseId+'/'+'module/'+moduleId+'/lesson' ,
             {
                 method: 'GET'
             }).then(function (response) {
@@ -68,7 +86,7 @@ class LessonServiceClient {
     }
 
     updateLesson(lessonId,lesson,callback) {
-        return fetch(LESSON_API_URL + '/' + lessonId,
+        return fetch(this.createLessonUrl() + '/' + lessonId,
             {
                 body: JSON.stringify(lesson),
                 headers: {
@@ -81,7 +99,6 @@ class LessonServiceClient {
             else return null;
         }).then(callback);
     }
-
 
 }
 
