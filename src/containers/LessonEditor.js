@@ -1,13 +1,16 @@
 import React from 'react';
 import LessonServiceClient from "../services/LessonServiceClient";
 import TopicPills from './TopicPills'
+import TopicEditor from './TopicEditor'
+import {Route} from 'react-router-dom';
 
 class LessonEditor extends React.Component {
     constructor(props) {
         super(props);
-        this.selectCourse = this.selectCourse.bind(this);
-        this.selectModule = this.selectModule.bind(this);
-        this.selectLesson = this.selectLesson.bind(this);
+        // this.selectCourse = this.selectCourse.bind(this);
+        // this.selectModule = this.selectModule.bind(this);
+        // this.selectLesson = this.selectLesson.bind(this);
+         this.select = this.select.bind(this);
         this.lessonService = LessonServiceClient.instance;
         this.populate = this.populate.bind(this);
         this.renderTopicPills=this.renderTopicPills.bind(this);
@@ -24,12 +27,13 @@ class LessonEditor extends React.Component {
     }
 
     componentWillReceiveProps(newProps){
-        this.selectCourse
-        (newProps.match.params.courseId);
-        this.selectModule
-        (newProps.match.params.moduleId);
-        this.selectLesson
-        (newProps.match.params.lessonId);
+        // this.selectCourse
+        // (newProps.match.params.courseId);
+        // this.selectModule
+        // (newProps.match.params.moduleId);
+        // this.selectLesson
+        this.select
+        (newProps.match.params.courseId,newProps.match.params.moduleId,newProps.match.params.lessonId);
 
         var lessonId=newProps.match.params.lessonId;
 
@@ -38,19 +42,25 @@ class LessonEditor extends React.Component {
     }
 
 
-    selectCourse(courseId) {
-        this.setState({courseId:courseId});
+    // selectCourse(courseId) {
+    //     this.setState({courseId:courseId});
+    // }
+    //
+    //
+    // selectLesson(lessonId) {
+    //     this.setState({lessonId:lessonId});
+    // }
+    //
+    // selectModule(moduleId) {
+    //     this.setState({moduleId:moduleId});
+    //
+    // }
+
+    select(courseId,moduleId,lessonId) {
+        this.setState({courseId:courseId,lessonId:lessonId,moduleId:moduleId});
+
     }
 
-
-    selectLesson(lessonId) {
-        this.setState({lessonId:lessonId});
-    }
-
-    selectModule(moduleId) {
-        this.setState({moduleId:moduleId});
-
-    }
 
     populate(lesson) {
         this.setState({lesson: lesson});
@@ -91,13 +101,17 @@ class LessonEditor extends React.Component {
                     <form className="form-inline navbar-brand" style={{display:'none'}} id='form3'>
                         <input type="text" className="form-control"  defaultValue={this.state.lesson.title}
                                onChange={this.titleChange}/>
-                        <i className="btn fa-2x fa fa-check" title="Update Module Name"
+                        <i className="btn fa-2x fa fa-check" title="Update Lesson Name"
                            style={{color: 'white', borderRadius: "50px"}} onClick={this.updateLessonDetails} ></i>
                     </form>
-                    <i className="btn fa-2x fa fa-pencil ml-auto" title="Edit Module Name"
+                    <i className="btn fa-2x fa fa-pencil ml-auto" title="Edit Lesson Name"
                        style={{color: 'white', borderRadius: "50px"}} onClick={this.editModule}></i>
                 </nav>
                 {this.renderTopicPills()}
+                <div >
+                    <Route path="/course/:courseId/edit/module/:moduleId/edit/lesson/:lessonId/topic/:topicId"
+                           component={TopicEditor}  ></Route>
+                </div>
             </div>
         );
     }

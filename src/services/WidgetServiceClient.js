@@ -1,7 +1,7 @@
 let _singleton = Symbol();
 
 
-class TopicServiceClient {
+class WidgetServiceClient {
     constructor(singletonToken) {
         if (_singleton !== singletonToken)
             throw new Error('Cannot instantiate directly.');
@@ -9,20 +9,20 @@ class TopicServiceClient {
 
     static get instance() {
         if (!this[_singleton])
-            this[_singleton] = new TopicServiceClient(_singleton);
+            this[_singleton] = new WidgetServiceClient(_singleton);
         return this[_singleton]
     }
 
 
-    createTopicUrl(){
+    createWidgetUrl(){
 
-        const TOPIC_API_URL = 'http://localhost:8080/api/topic';
+        const WIDGET_API_URL = 'http://localhost:8080/api/widget';
 
         var url=window.location.href;
         if(!url.toString().includes('localhost'))
-            return 'https://webdev-rastogi-shubham.herokuapp.com/api/topic';
+            return 'https://webdev-rastogi-shubham.herokuapp.com/api/widget';
         else
-            return TOPIC_API_URL;
+            return WIDGET_API_URL;
 
     }
 
@@ -36,8 +36,8 @@ class TopicServiceClient {
 
     }
 
-    findAllLTopics() {
-        return fetch(this.createTopicUrl())
+    findAllWidgets() {
+        return fetch(this.createWidgetUrl())
             .then(function (response) {
                 if(response.headers.get("content-type")!=null)
                     return response.json();
@@ -45,9 +45,10 @@ class TopicServiceClient {
             });
     }
 
-    createTopic(courseId,moduleId,lessonId,topic) {
-        return fetch(this.createCourseUrl()+'/'+courseId+'/'+'module/'+moduleId+'/lesson/'+lessonId+'/topic' ,{
-            body: JSON.stringify(topic),
+    createWidget(courseId,moduleId,lessonId,topicId,widget) {
+        return fetch(this.createCourseUrl()+'/'+courseId+'/'+'module/'+moduleId+'/lesson/'+lessonId+'/topic'
+            +topicId+'/widget' ,{
+            body: JSON.stringify(widget),
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -59,27 +60,16 @@ class TopicServiceClient {
         });
     }
 
-    deleteTopic(topicId,callback) {
-        return fetch(this.createTopicUrl() + '/' + topicId,
+    deleteWidget(widgetId,callback) {
+        return fetch(this.createWidgetUrl() + '/' + widgetId,
             {
                 method: 'DELETE'
             }).then(callback);
 
     }
 
-    findTopicById(topicId,callback) {
-        return fetch(this.createTopicUrl() + '/' + topicId,
-            {
-                method: 'GET'
-            }).then(function (response) {
-            if(response.headers.get("content-type")!=null)
-                return response.json();
-            else return null;
-        }).then(callback);
-    }
-
-    findAllTopicsForLesson(courseId,moduleId,lessonId) {
-        return fetch(this.createCourseUrl()+'/'+courseId+'/'+'module/'+moduleId+'/lesson/'+lessonId+'/topic' ,
+    findWidgetById(widgetId) {
+        return fetch(this.createWidgetUrl() + '/' + widgetId,
             {
                 method: 'GET'
             }).then(function (response) {
@@ -89,10 +79,21 @@ class TopicServiceClient {
         });
     }
 
-    updateTopic(topicId,topic,callback) {
-        return fetch(this.createTopicUrl() + '/' + topicId,
+    findAllWidgetsForTopic(courseId,moduleId,lessonId,topicId) {
+        return fetch(this.createCourseUrl()+'/'+courseId+'/'+'module/'+moduleId+'/lesson/'+lessonId+'/topic/'+topicId+'/widget' ,
             {
-                body: JSON.stringify(topic),
+                method: 'GET'
+            }).then(function (response) {
+            if(response.headers.get("content-type")!=null)
+                return response.json();
+            else return null;
+        });
+    }
+
+    updateWidget(widgetId,widget) {
+        return fetch(this.createWidgetUrl() + '/' + widgetId,
+            {
+                body: JSON.stringify(widget),
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -101,9 +102,9 @@ class TopicServiceClient {
             if(response.headers.get("content-type")!=null)
                 return response.json();
             else return null;
-        }).then(callback);
+        });
     }
 
 }
 
-export default TopicServiceClient;
+export default WidgetServiceClient;

@@ -7,8 +7,9 @@ import { Route} from 'react-router-dom';
 class ModuleEditor extends React.Component {
     constructor(props) {
         super(props);
-        this.selectCourse = this.selectCourse.bind(this);
-        this.selectModule = this.selectModule.bind(this);
+        // this.selectCourse = this.selectCourse.bind(this);
+        // this.selectModule = this.selectModule.bind(this);
+        this.select = this.select.bind(this);
         this.moduleService = ModuleServiceClient.instance;
         this.populateTitle = this.populateTitle.bind(this);
         this.updateModuleDetails = this.updateModuleDetails.bind(this);
@@ -22,23 +23,35 @@ class ModuleEditor extends React.Component {
     }
 
     componentWillReceiveProps(newProps){
-        this.selectCourse
-        (newProps.match.params.courseId);
-        this.selectModule
-        (newProps.match.params.moduleId);
+        // this.selectCourse
+        // (newProps.match.params.courseId);
+        // this.selectModule
+        // (newProps.match.params.moduleId);
+
+        this.select
+        (newProps.match.params.courseId,newProps.match.params.moduleId);
+
     }
 
 
 
-    selectCourse(courseId) {
-        this.setState({courseId:courseId});
-    }
+    // selectCourse(courseId) {
+    //     this.setState({courseId:courseId});
+    // }
+    //
+    // selectModule(moduleId) {
+    //     this.setState({moduleId:moduleId});
+    //     if(moduleId!=null && moduleId!='')
+    //         this.moduleService.findModuleById(moduleId, this.populateTitle);
+    // }
 
-    selectModule(moduleId) {
-        this.setState({moduleId:moduleId});
+    select(courseId,moduleId) {
+        this.setState({moduleId:moduleId,courseId:courseId});
         if(moduleId!=null && moduleId!='')
             this.moduleService.findModuleById(moduleId, this.populateTitle);
     }
+
+
 
     populateTitle(module) {
         this.setState({module: module});

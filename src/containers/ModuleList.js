@@ -21,9 +21,9 @@ class ModuleList extends React.Component {
 
     }
 
-    componentDidMount() {
-        this.setCourseId(this.props.courseId);
-    }
+    // componentDidMount() {
+    //     this.setCourseId(this.props.courseId);
+    // }
 
     componentWillReceiveProps(newProps) {
         this.setCourseId(newProps.courseId);
@@ -75,7 +75,6 @@ class ModuleList extends React.Component {
                 this.findAllModulesForCourse();
             else
                 window.location.href = newLoc;
-
         });
     }
 
