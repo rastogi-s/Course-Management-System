@@ -20,7 +20,6 @@ class CourseList extends React.Component {
         this.titleChange = this.titleChange.bind(this);
         this.setSortByTitle = this.setSortByTitle.bind(this);
         this.setSortByLastModified = this.setSortByLastModified.bind(this);
-        this.setSortByLastOpened = this.setSortByLastOpened.bind(this);
 
     }
 
@@ -34,9 +33,6 @@ class CourseList extends React.Component {
         this.findAllCourses();
     }
 
-    setSortByLastOpened() {
-
-    }
 
     deleteCourse(id) {
 
@@ -103,7 +99,6 @@ class CourseList extends React.Component {
         if (date.getDay() === today.getDay() &&
             date.getMonth() === today.getMonth() &&
             date.getFullYear() === today.getFullYear()) {
-            //console.log("todays date:" + date);
             if (date.getHours() < 12) {
                 var min=date.getMinutes();
                 if(min<10)

@@ -1,13 +1,10 @@
 import * as constants from "./../constants/index"
 import WidgetServiceClient from "../services/WidgetServiceClient";
 
-
 export const widgetReducer = (state, action) => {
-    //this.widgetService = WidgetServiceClient.instance;
-    //let newState
+
     var widgetService = WidgetServiceClient.instance;
-     //console.log("asasasa", state);
-    //console.log('that is why in props in reducer?', action.type);
+
     switch (action.type) {
 
         case constants.PREVIEW:
@@ -21,6 +18,16 @@ export const widgetReducer = (state, action) => {
             }
 
         case constants.WIDGET_NAME_CHANGED:
+
+            var nonUniqueName=false;
+            var nonUniqueWidgetId=-1;
+            for(var w in state.widgets){
+                if(action.name==state.widgets[w].name) {
+                    nonUniqueName = true;
+                    nonUniqueWidgetId = action.id;
+                }
+            }
+
             return {
                 widgets: state.widgets.map(widget => {
                     if (widget.id === action.id) {
@@ -31,7 +38,9 @@ export const widgetReducer = (state, action) => {
                 courseId: state.courseId,
                 moduleId: state.moduleId,
                 topicId: state.topicId,
-                lessonId: state.lessonId
+                lessonId: state.lessonId,
+                nonUniqueName:nonUniqueName,
+                nonUniqueWidgetId:nonUniqueWidgetId
             }
 
 
@@ -134,50 +143,27 @@ export const widgetReducer = (state, action) => {
             return JSON.parse(JSON.stringify(newState))
 
         case constants.SAVE:
-            var loc = window.location.href;
-            var courseId = '', moduleId = '', lessonId = '', topicId = ''
+            if(state.nonUniqueName!==true) {
+                var loc = window.location.href;
+                var courseId = '', moduleId = '', lessonId = '', topicId = ''
 
-            var arrUrl = loc.split('/');
-            console.log(arrUrl);
-            courseId = arrUrl[4];
-            moduleId = arrUrl[7];
-            lessonId = arrUrl[10];
-            topicId = arrUrl[13];
-            console.log(courseId, moduleId, lessonId, topicId);
-            var widgets = state.widgets;
-            //var newWidgets=[]
-            for (var wid in widgets) {
-                delete widgets[wid]['id'];
-                //newWidgets.push(wid);
+                var arrUrl = loc.split('/');
+                console.log(arrUrl);
+                courseId = arrUrl[4];
+                moduleId = arrUrl[7];
+                lessonId = arrUrl[10];
+                topicId = arrUrl[13];
+                var widgets = state.widgets;
+                for (var wid in widgets) {
+                    delete widgets[wid]['id'];
+                }
+
+                console.log(widgets);
+
+                widgetService.createWidget(courseId, moduleId, lessonId, topicId, widgets);
             }
-
-            console.log(widgets);
-
-            widgetService.createWidget(courseId, moduleId, lessonId, topicId, widgets);
             return state;
 
-        // case constants.FIND_ALL_WIDGETS:
-        //     var loc = window.location.href;
-        //     var courseId = '', moduleId = '', lessonId = '', topicId = ''
-        //     var arrUrl = loc.split('/');
-        //     //console.log(arrUrl);
-        //     courseId = arrUrl[4];
-        //     moduleId = arrUrl[7];
-        //     lessonId = arrUrl[10];
-        //     topicId = arrUrl[13];
-        //     //console.log(courseId, moduleId, lessonId, topicId);
-        //     widgetService.findAllWidgetsForTopic(courseId, moduleId, lessonId, topicId).then(widgets => {
-        //
-        //         return {
-        //             widgets: widgets,
-        //             courseId: state.courseId,
-        //             moduleId: state.moduleId,
-        //             topicId: state.topicId,
-        //             lessonId: state.lessonId
-        //         }
-        //     });
-        //
-        //     //return newState;
         case constants.FIND_ALL_WIDGETS:
             newState = Object.assign({}, state)
             newState.widgets = action.widgets;
@@ -193,6 +179,7 @@ export const widgetReducer = (state, action) => {
                 topicId: state.topicId,
                 lessonId: state.lessonId
             }
+
         case constants.MOVE_UP:
 
             var widIndex = state.widgets.findIndex(widget => (
@@ -262,38 +249,6 @@ export const widgetReducer = (state, action) => {
 
             }
         default:
-        //     var loc = window.location.href;
-        //     var courseId = '', moduleId = '', lessonId = '', topicId = ''
-        //
-        //     var arrUrl = loc.split('/');
-        //     console.log(arrUrl);
-        //     courseId = arrUrl[4];
-        //     moduleId = arrUrl[7];
-        //     lessonId = arrUrl[10];
-        //     topicId = arrUrl[13];
-        //     console.log(courseId, moduleId, lessonId, topicId);
-        //     // console.log(state);
-        //     // //var widgetService = WidgetServiceClient.instance;
-        //     // if (state.courseId != undefined && state.courseId != '') {
-        //     let newState1;
-        //
-        //     newState1=widgetService.findAllWidgetsForTopic(courseId, moduleId, lessonId, topicId).then(widgets => {
-        //
-        //         let newState = {
-        //             widgets: widgets,
-        //             courseId: courseId,
-        //             moduleId: moduleId,
-        //             topicId: topicId,
-        //             lessonId:lessonId
-        //         }
-        //
-        //         console.log("in default", newState);
-        //
-        //         return newState;
-        //
-        //     })
-        //     //return newState1;
-        // // else
-        return state
+            return state
     }
 }

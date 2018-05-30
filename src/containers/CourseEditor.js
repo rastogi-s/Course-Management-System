@@ -31,7 +31,6 @@ class CourseEditor extends React.Component {
     }
 
     updateCourseDetails(){
-        //console.log(this.state.updateCourse);
         this.courseService.updateCourse(this.state.courseId,this.state.updateCourse ,this.populateTitle);
     }
 
@@ -43,7 +42,6 @@ class CourseEditor extends React.Component {
     }
 
     selectCourse(courseId) {
-        //console.log('in course editor select course');
         this.setState({courseId:courseId});
         if(courseId!=null && courseId!='')
         this.courseService.findCourseById(courseId, this.populateTitle);
@@ -51,8 +49,6 @@ class CourseEditor extends React.Component {
     }
 
     populateTitle(course) {
-        //console.log('in course editor populate title');
-        //console.log(course);
         this.setState({course: course});
         document.getElementById('form1').style.display="none";
         document.getElementById('title').style.display='';

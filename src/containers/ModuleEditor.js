@@ -2,13 +2,11 @@ import React from 'react';
 import ModuleServiceClient from "../services/ModuleServiceClient";
 import LessonTabs from "./LessonTabs";
 import LessonEditor from "./LessonEditor"
-import { Route} from 'react-router-dom';
+import {Route} from 'react-router-dom';
 
 class ModuleEditor extends React.Component {
     constructor(props) {
         super(props);
-        // this.selectCourse = this.selectCourse.bind(this);
-        // this.selectModule = this.selectModule.bind(this);
         this.select = this.select.bind(this);
         this.moduleService = ModuleServiceClient.instance;
         this.populateTitle = this.populateTitle.bind(this);
@@ -23,34 +21,17 @@ class ModuleEditor extends React.Component {
     }
 
     componentWillReceiveProps(newProps){
-        // this.selectCourse
-        // (newProps.match.params.courseId);
-        // this.selectModule
-        // (newProps.match.params.moduleId);
-
         this.select
         (newProps.match.params.courseId,newProps.match.params.moduleId);
 
     }
 
 
-
-    // selectCourse(courseId) {
-    //     this.setState({courseId:courseId});
-    // }
-    //
-    // selectModule(moduleId) {
-    //     this.setState({moduleId:moduleId});
-    //     if(moduleId!=null && moduleId!='')
-    //         this.moduleService.findModuleById(moduleId, this.populateTitle);
-    // }
-
     select(courseId,moduleId) {
         this.setState({moduleId:moduleId,courseId:courseId});
         if(moduleId!=null && moduleId!='')
             this.moduleService.findModuleById(moduleId, this.populateTitle);
     }
-
 
 
     populateTitle(module) {
@@ -72,7 +53,6 @@ class ModuleEditor extends React.Component {
     }
 
     updateModuleDetails(){
-        //console.log(this.state.updateCourse);
         this.moduleService.updateModule(this.state.moduleId,this.state.updateModule ,this.populateTitle);
     }
 
@@ -109,7 +89,6 @@ class ModuleEditor extends React.Component {
             </div>
 
         );
-
     }
 }
 

@@ -15,9 +15,6 @@ class LessonTabs extends React.Component {
         };
         this.lessonService = LessonServiceClient.instance;
         this.myRef = React.createRef();
-        // this.setCourseId = this.setCourseId.bind(this);
-        // this.setModuleId = this.setModuleId.bind(this);
-        // this.setModule = this.setModule.bind(this);
         this.set = this.set.bind(this);
         this.deleteLesson = this.deleteLesson.bind(this);
         this.createLesson = this.createLesson.bind(this);
@@ -25,43 +22,18 @@ class LessonTabs extends React.Component {
         this.findAllLessonsForModule = this.findAllLessonsForModule.bind(this);
     }
 
-    // componentDidMount() {
-    //     this.setCourseId(this.props.courseId);
-    //     this.setModuleId(this.props.moduleId);
-    //     this.setModule(this.props.module);
-    //     // if(this.state.courseId!=null && this.state.courseId!='' && this.state.moduleId!=null && this.state.moduleId!='' )
-    //     //  this.findAllLessonsForModule();
-    // }
 
 
     componentWillReceiveProps(props) {
         this.set(props.courseId,props.module,props.moduleId)
-        // this.setCourseId(props.courseId);
-        // this.setModule(props.module);
-        // this.setModuleId(props.moduleId);
-
         if (props.courseId != undefined && props.courseId != '' && props.moduleId != null && props.moduleId != '') {
 
             this.findAllLessonsForModule();
         }
     }
 
-    // setCourseId(courseId) {
-    //     this.setState({courseId: courseId});
-    // }
-    //
-    // setModuleId(moduleId) {
-    //     this.setState({moduleId: moduleId});
-    // }
-    //
-    // setModule(module) {
-    //     this.setState({module: module});
-    //     this.setState({lessons: module.lessons});
-    // }
-
     set(courseId,module,moduleId) {
         this.setState({module: module,lessons: module.lessons, courseId: courseId, moduleId: moduleId});
-        //this.setState({});
     }
 
 

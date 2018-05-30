@@ -83,7 +83,6 @@ class CourseGrid extends React.Component {
 
             }
             this.setState({courses: courses});
-            //console.log(this.state.courses);
         });
     }
 

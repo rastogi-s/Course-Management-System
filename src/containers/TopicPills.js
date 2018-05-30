@@ -1,10 +1,6 @@
 import React from 'react';
 import TopicPillsItems from './../components/TopicPillsItems'
 import TopicServiceClient from './../services/TopicServiceClient'
-// import {Provider} from 'react-redux'
-// import {createStore} from 'redux'
-// import {widgetReducer} from './../reducers/widgetReducer';
-// import App from './WidgetList';
 
 class TopicPills extends React.Component {
 
@@ -20,8 +16,6 @@ class TopicPills extends React.Component {
         };
         this.topicService = TopicServiceClient.instance;
         this.myRef = React.createRef();
-        //this.setCourseId = this.setCourseId.bind(this);
-        //this.setModuleId = this.setModuleId.bind(this);
         this.set = this.set.bind(this);
         this.deleteTopic = this.deleteTopic.bind(this);
         this.editTopic = this.editTopic.bind(this);
@@ -32,28 +26,13 @@ class TopicPills extends React.Component {
     }
 
     componentWillReceiveProps(props) {
-        this.set(props.courseId,props.moduleId,props.lessonId);
-        // this.setCourseId(props.courseId);
-        // this.setModuleId(props.moduleId);
-        // this.setLessonId(props.lessonId);
+        this.set(props.courseId, props.moduleId, props.lessonId);
         this.findAllTopicsForLesson();
     }
 
-    set(courseId,moduleId,lessonId) {
-        this.setState({courseId: courseId,moduleId: moduleId,lessonId: lessonId});
+    set(courseId, moduleId, lessonId) {
+        this.setState({courseId: courseId, moduleId: moduleId, lessonId: lessonId});
     }
-
-    // setCourseId(courseId) {
-    //     this.setState({courseId: courseId});
-    // }
-    //
-    // setModuleId(moduleId) {
-    //     this.setState({moduleId: moduleId});
-    // }
-    //
-    // setLessonId(lessonId) {
-    //     this.setState({lessonId: lessonId});
-    // }
 
     findAllTopicsForLesson() {
         if (this.state.courseId != null && this.state.courseId != '' && this.state.moduleId != null &&
@@ -114,27 +93,20 @@ class TopicPills extends React.Component {
 
     render() {
         console.log('in topic pills');
-        // let store = createStore(widgetReducer);
-        // let idState=[this.setCourseId()]
         return (
             <div>
                 <ul className="nav nav-pills p-0 pt-3">
                     {this.renderTopicPillItems()}
                     <li className="nav-item p-0 pr-3">
                         <form className="form-inline mb-4">
-                            <input className="form-control" placeholder="New Lesson Name"
+                            <input className="form-control" placeholder="New Topic Name"
                                    onChange={this.titleChange} ref={this.myRef}/>
                             <i className="btn fa-2x fa fa-plus pl-4 " title="Add a topic"
                                style={{color: 'white'}} onClick={this.createTopic}></i>
                         </form>
-
                     </li>
-
                 </ul>
                 <div>
-
-                    {/*//<Route path="" > </Route>*/}
-
                 </div>
             </div>
         );

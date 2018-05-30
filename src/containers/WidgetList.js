@@ -1,33 +1,23 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import * as actions from "../actions"
-import WidgetContainer from '../components/widget'
+import WidgetContainer from '../components/Widget'
 
 class WidgetList extends Component {
     constructor(props) {
         super(props);
         console.log('that is why?');
         this.props.findAllWidgetsForTopic();
-        // this.state={
-        //     id:this.props.courseId
-        // }
-
     }
 
-    componentWillReceiveProps(props){
-        console.log(props.topicId);
-        //this.props.findAllWidgetsForTopic();
-    }
 
     componentDidUpdate(prevProps) {
-        console.log('that is why in previous props?');
-        console.log(this.props.topicId);
-        console.log(prevProps.topicId);
         if (this.props.topicId !== prevProps.topicId) {
             console.log('inside if');
             this.props.findAllWidgetsForTopic();
         }
     }
+
 
 
 
@@ -42,7 +32,6 @@ class WidgetList extends Component {
 
 
     renderWidgets(){
-        console.log('that is why in props in render?');
         var newWidgetList=[];
         if(this.props.widgets!=undefined) {
             var widgets = this.sort(this.props.widgets);
@@ -63,13 +52,10 @@ class WidgetList extends Component {
                                                     disableDown={disableDown}/>)
             }
         }
-        console.log(newWidgetList);
         return newWidgetList;
     }
 
     render() {
-        console.log("dsdsds",this.props.widgets);
-
         return (
             <div>
                 <div className="container">
@@ -88,11 +74,6 @@ class WidgetList extends Component {
                         <div className="col">
                             <ul className="mt-5">
                                 {this.renderWidgets()}
-                                {/*{this.props.widgets.map(widget => (*/}
-                                    {/*<WidgetContainer widget={widget}*/}
-                                                     {/*preview={this.props.previewMode}*/}
-                                                     {/*key={widget.id}/>*/}
-                                {/*))}*/}
                             </ul>
 
                         </div>
@@ -112,9 +93,6 @@ class WidgetList extends Component {
 }
 
 const stateToPropertiesMapper = (state,ownProps) => ({
-    // courseId: ownProps.courseId,
-    // moduleId: ownProps.moduleId,
-    // lessonId: ownProps.lessonId,
     topicId: ownProps.topicId,
     widgets: state.widgets,
     previewMode: state.preview
