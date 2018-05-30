@@ -21,9 +21,6 @@ class ModuleList extends React.Component {
 
     }
 
-    // componentDidMount() {
-    //     this.setCourseId(this.props.courseId);
-    // }
 
     componentWillReceiveProps(newProps) {
         this.setCourseId(newProps.courseId);

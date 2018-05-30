@@ -12,6 +12,7 @@ class ConfirmationModal extends React.Component {
 
     delete(){
         console.log(this.props.id);
+        console.log('sasasadada');
         this.props.onClickConfirm(this.props.property.id);
         const elem=findDOMNode(this.myRef.current);
         $(elem).modal('toggle');

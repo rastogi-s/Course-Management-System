@@ -12,7 +12,7 @@ class TopicPillsItems extends React.Component {
     render() {
 
         const link=(<Link
-            to={`/course/${this.props.courseId}/edit/module/${this.props.moduleId }/edit/lesson/${this.props.lessonId}/topic/${this.props.topic.id}`}>
+            to={`/course/${this.props.courseId}/edit/module/${this.props.moduleId }/edit/lesson/${this.props.lessonId}/edit/topic/${this.props.topic.id}`}>
             <strong style={{fontFamily:'Ariel',fontSize:"large",color:"black" }}>{this.props.topic.title}</strong>
         </Link>);
         return (

@@ -46,7 +46,8 @@ class WidgetServiceClient {
     }
 
     createWidget(courseId,moduleId,lessonId,topicId,widget) {
-        return fetch(this.createCourseUrl()+'/'+courseId+'/'+'module/'+moduleId+'/lesson/'+lessonId+'/topic'
+        //console.log(widget);
+        return fetch(this.createCourseUrl()+'/'+courseId+'/'+'module/'+moduleId+'/lesson/'+lessonId+'/topic/'
             +topicId+'/widget' ,{
             body: JSON.stringify(widget),
             headers: {

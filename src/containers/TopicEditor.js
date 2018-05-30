@@ -4,13 +4,11 @@ import {Provider} from 'react-redux'
 import {createStore} from 'redux'
 import {widgetReducer} from './../reducers/widgetReducer';
 import App from './../containers/WidgetList';
+//import * as actions from "../actions"
 
 class LessonEditor extends React.Component {
     constructor(props) {
         super(props);
-        // this.selectCourse = this.selectCourse.bind(this);
-        // this.selectModule = this.selectModule.bind(this);
-        // this.selectLesson = this.selectLesson.bind(this);
         this.select = this.select.bind(this);
         this.topicService = TopicServiceClient.instance;
         this.populate = this.populate.bind(this);
@@ -26,14 +24,6 @@ class LessonEditor extends React.Component {
     }
 
     componentWillReceiveProps(newProps){
-        // this.selectCourse
-        // (newProps.match.params.courseId);
-        // this.selectModule
-        // (newProps.match.params.moduleId);
-        // this.selectLesson
-        // (newProps.match.params.lessonId);
-        // this.selectTopic
-        // (newProps.match.params.topicId);
 
         this.select(newProps.match.params.courseId,newProps.match.params.moduleId,
             newProps.match.params.lessonId,newProps.match.params.topicId);
@@ -47,24 +37,6 @@ class LessonEditor extends React.Component {
         this.setState({courseId:courseId,moduleId:moduleId,lessonId:lessonId,topicId:topicId});
     }
 
-    // selectCourse(courseId) {
-    //     this.setState({courseId:courseId});
-    // }
-    //
-    //
-    // selectLesson(lessonId) {
-    //     this.setState({lessonId:lessonId});
-    // }
-    //
-    // selectModule(moduleId) {
-    //     this.setState({moduleId:moduleId});
-    //
-    // }
-    //
-    // selectTopic(topicId) {
-    //     this.setState({topicId:topicId});
-    //
-    // }
 
     populate(topic) {
 
@@ -91,11 +63,18 @@ class LessonEditor extends React.Component {
 
     }
 
+
+
     render() {
 
-        let store = createStore(widgetReducer);
-        let idState=[this.state.courseId,this.state.moduleId,this.state.lessonId,this.state.topicId];
+       // var idState=[this.state.courseId,this.state.moduleId,this.state.lessonId,this.state.topicId];
+        let initialState = {widgets: [], preview: false,courseId:this.state.courseId,moduleId:this.state.moduleId,
+        lessonId:this.state.lessonId,topicId:this.state.topicId}
+        //initialState=JSON.parse(JSON.stringify(initialState));
 
+        let store = createStore(widgetReducer,initialState);
+        //store.dispatch({type: 'FIND_ALL_WIDGETS'});
+        //actions.findAllWidgetsForTopic(store.dispatch({type: 'FIND_ALL_WIDGETS'}));
         return (
             <div className="mt-5" >
                 <nav className="navbar navbar-dark bg-dark mb-3" style={{borderRadius: 5}}>
@@ -112,7 +91,7 @@ class LessonEditor extends React.Component {
                 </nav>
                 <div>
                     <Provider store={store} >
-                        <App idState={idState}/>
+                        <App topicId={this.state.topicId} />
                     </Provider>
                 </div>
 

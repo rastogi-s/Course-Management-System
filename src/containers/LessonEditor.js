@@ -109,7 +109,7 @@ class LessonEditor extends React.Component {
                 </nav>
                 {this.renderTopicPills()}
                 <div >
-                    <Route path="/course/:courseId/edit/module/:moduleId/edit/lesson/:lessonId/topic/:topicId"
+                    <Route path="/course/:courseId/edit/module/:moduleId/edit/lesson/:lessonId/edit/topic/:topicId"
                            component={TopicEditor}  ></Route>
                 </div>
             </div>
