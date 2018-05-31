@@ -257,78 +257,6 @@ class Image extends React.Component {
     }
 }
 
-
-// const Image = ({widget, preview, imageURLChanged, widgetNameChanged, nonUniqueName, nonUniqueWidgetId}) => {
-//
-//
-//     let inputElem;
-//     let inputNameElem;
-//     let name;
-//     if (widget.name != null)
-//         name = widget.name;
-//     else
-//         name = '';
-//
-//     let src;
-//     if (widget.src != null)
-//         src = widget.src;
-//     else
-//         src = '';
-//
-//     let inputImageSearch;
-//
-//     return (
-//         <div>
-//             <div className="mt-3" hidden={preview}>
-//                 <form className="">
-//                     <div className="form-group row">
-//                         <label htmlFor="imageUrl" className="col-sm-2 col-form-label "><h5>Image URL</h5></label>
-//                         <div className="col-sm-10">
-//                             <input className="form-control" id="imageUrl"
-//                                    onChange={() => imageURLChanged(widget.id, inputElem.value)}
-//                                    value={src}
-//                                    ref={node => inputElem = node} placeholder="Image URL"/>
-//                         </div>
-//                     </div>
-//
-//
-//                     <div className="form-group row">
-//                         <label htmlFor="imageSearch" className="col-sm-2 col-form-label"><h5>Image Search</h5></label>
-//                         <div id='gsearch' className="col-sm-10" ref={node => inputImageSearch = node}
-//                              // on={() => imageSearchRender(inputImageSearch,googleSearch) }
-//                         >
-//
-//                         </div>
-//                     </div>
-//
-//
-//                     <div className="form-group row">
-//                         <label htmlFor="widgetName" className="col-sm-2 col-form-label"><h5>Widget Name</h5></label>
-//                         <div className="col-sm-10">
-//                             <input className="form-control" id="widgetName" placeholder="Widget Name"
-//                                    onChange={() => widgetNameChanged(widget.id, inputNameElem.value)}
-//                                    value={name}
-//                                    ref={node => inputNameElem = node}/>
-//                             {nonUniqueName && nonUniqueWidgetId === widget.id &&
-//                             <div className="alert alert-danger mt-2" role="alert">
-//                                 The widget name is not unique!
-//                             </div>}
-//                         </div>
-//                     </div>
-//
-//
-//                 </form>
-//                 <h3>Preview</h3>
-//             </div>
-//             <div className="row mt-2">
-//                 <div className="col">
-//                     <img src={src} className="form-control" alt="Image"/>
-//                 </div>
-//             </div>
-//         </div>
-//     )
-// }
-
 const ImageContainer = connect(stateToPropsMapper, dispatchToPropsMapper)(Image)
 
 const Link = ({widget, preview, linkURLChanged, widgetNameChanged, widgetTextChanged, nonUniqueName, nonUniqueWidgetId}) => {
@@ -386,6 +314,7 @@ const Link = ({widget, preview, linkURLChanged, widgetNameChanged, widgetTextCha
             </div>
             <div className="row mt-2">
                 <div className="col">
+
                     <a href={href}>{widget.text}</a>
 
                 </div>

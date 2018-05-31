@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import * as actions from "../actions"
 import WidgetContainer from '../components/Widget'
+import Toggle from 'react-toggle'
 
 
 class WidgetList extends Component {
@@ -61,9 +62,19 @@ class WidgetList extends Component {
                 <div className="container">
                     <div className="row">
                         <div className="col">
-                            <button className="btn btn-danger float-right" onClick={this.props.preview} title="Preview">
-                                Preview
-                            </button>
+
+                            <label className="float-right ">
+                                <span className="pr-3 text-light" style={{fontSize:"x-large"}} >Preview</span>
+                                <div className="float-right py-2">
+                                <Toggle
+                                    defaultChecked={this.props.previewMode}
+                                    onChange={this.props.preview} className="form-control" />
+                                </div>
+                            </label>
+                            {/*<button className="btn btn-danger float-right" onClick={this.props.preview} title="Preview">*/}
+                                {/*Preview*/}
+                            {/*</button>*/}
+
                             <button className="btn btn-primary mr-3 float-right" hidden={this.props.previewMode}
                                     onClick={this.props.save} title="Save">
                                 Save

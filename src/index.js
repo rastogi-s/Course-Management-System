@@ -5,6 +5,7 @@ import '../node_modules/bootstrap/dist/js/bootstrap.js';
 //import '../node_modules/react-bootstrap/dist/react-bootstrap';
 import '../node_modules/font-awesome/css/font-awesome.css';
 import '../node_modules/jquery/dist/jquery'
+import '../node_modules/react-toggle/style.css'
 
 import React from 'react';
 import ReactDOM from 'react-dom';
