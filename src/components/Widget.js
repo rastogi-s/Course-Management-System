@@ -2,6 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {DELETE_WIDGET, MOVE_DOWN, MOVE_UP} from "../constants/index"
 import * as actions from '../actions'
+import $ from "jquery";
 
 const dispatchToPropsMapper = dispatch => ({
     // heading
@@ -17,6 +18,9 @@ const dispatchToPropsMapper = dispatch => ({
     // Image
     imageURLChanged: (widgetId, newUrl) =>
         actions.imageURLChanged(dispatch, widgetId, newUrl),
+
+    // imageSearchRender:(element,content) =>
+    //     actions.imageSearchRender(dispatch,element,content),
 
     // Link
     linkURLChanged: (widgetId, newLinkUrl) =>
@@ -37,7 +41,7 @@ const stateToPropsMapper = state => ({
     nonUniqueWidgetId: state.nonUniqueWidgetId
 })
 
-const Heading = ({widget, preview, widgetTextChanged, headingSizeChanged,widgetNameChanged , nonUniqueName, nonUniqueWidgetId}) => {
+const Heading = ({widget, preview, widgetTextChanged, headingSizeChanged, widgetNameChanged, nonUniqueName, nonUniqueWidgetId}) => {
     let selectElem;
     let inputElemHead;
     let inputNameElemHead;
@@ -153,60 +157,177 @@ const Paragraph = ({widget, preview, widgetTextChanged, widgetNameChanged, nonUn
 
 const ParagraphContainer = connect(stateToPropsMapper, dispatchToPropsMapper)(Paragraph)
 
-const Image = ({widget, preview, imageURLChanged, widgetNameChanged, nonUniqueName, nonUniqueWidgetId}) => {
-    let inputElem;
-    let inputNameElem;
-    let name;
-    if (widget.name != null)
-        name = widget.name;
-    else
-        name = '';
+class Image extends React.Component {
 
-    let src;
-    if (widget.src != null)
-        src = widget.src;
-    else
-        src = '';
+    componentDidMount() {
+        const searchBar = `<script>
+  (function() {
+    var cx = '011034726881680445645:d0elghbcbnm';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search ></gcse:search>`
 
+        $('#googleSearch').html(searchBar);
+    }
 
-    return (
-        <div>
-            <div className="mt-3" hidden={preview}>
-                <form className="">
-                    <div className="form-group row">
-                        <label htmlFor="imageUrl" className="col-sm-2 col-form-label "><h5>Image URL</h5></label>
-                        <div className="col-sm-10">
-                            <input className="form-control" id="imageUrl"
-                                   onChange={() => imageURLChanged(widget.id, inputElem.value)}
-                                   value={src}
-                                   ref={node => inputElem = node} placeholder="Image URL"/>
+    render() {
+
+        var widget = this.props.widget;
+        var preview = this.props.preview;
+        var imageURLChanged = this.props.imageURLChanged;
+        var widgetNameChanged = this.props.widgetNameChanged;
+        var nonUniqueName = this.props.nonUniqueName;
+        var nonUniqueWidgetId = this.props.nonUniqueWidgetId;
+
+        let inputElem;
+        let inputNameElem;
+        let name;
+        if (widget.name != null)
+            name = widget.name;
+        else
+            name = '';
+
+        let src;
+        if (widget.src != null)
+            src = widget.src;
+        else
+            src = '';
+
+        let inputImageSearch;
+
+        return (
+            <div>
+                <div className="mt-3" hidden={preview}>
+                    <form className="">
+                        <div className="form-group row">
+                            <label htmlFor="imageUrl" className="col-sm-2 col-form-label "><h5>Image URL</h5></label>
+                            <div className="col-sm-10">
+                                <input className="form-control" id="imageUrl"
+                                       onChange={() => imageURLChanged(widget.id, inputElem.value)}
+                                       value={src}
+                                       ref={node => inputElem = node} placeholder="Image URL"/>
+                            </div>
                         </div>
-                    </div>
 
-                    <div className="form-group row">
-                        <label htmlFor="widgetName" className="col-sm-2 col-form-label"><h5>Widget Name</h5></label>
-                        <div className="col-sm-10">
-                            <input className="form-control" id="widgetName" placeholder="Widget Name"
-                                   onChange={() => widgetNameChanged(widget.id, inputNameElem.value)}
-                                   value={name}
-                                   ref={node => inputNameElem = node}/>
-                            {nonUniqueName && nonUniqueWidgetId === widget.id &&
-                            <div className="alert alert-danger mt-2" role="alert">
-                                The widget name is not unique!
-                            </div>}
+
+                        <div className="form-group row">
+                            <label htmlFor="imageSearch" className="col-sm-2 col-form-label"><h5>Image Search</h5>
+                            </label>
+                            <div className="col-sm-10"
+                                 ref={node => inputImageSearch = node}>
+                                <div id='googleSearch' className="form-control p-0" >
+
+                                </div>
+                            </div>
                         </div>
+
+
+                        <div className="form-group row">
+                            <label htmlFor="widgetName" className="col-sm-2 col-form-label"><h5>Widget Name</h5></label>
+                            <div className="col-sm-10">
+                                <input className="form-control" id="widgetName" placeholder="Widget Name"
+                                       onChange={() => widgetNameChanged(widget.id, inputNameElem.value)}
+                                       value={name}
+                                       ref={node => inputNameElem = node}/>
+                                {nonUniqueName && nonUniqueWidgetId === widget.id &&
+                                <div className="alert alert-danger mt-2" role="alert">
+                                    The widget name is not unique!
+                                </div>}
+                            </div>
+                        </div>
+
+
+                    </form>
+                    <h3>Preview</h3>
+                </div>
+                <div className="row mt-2">
+                    <div className="col">
+                        <img src={src} className="form-control" alt="Image"/>
                     </div>
-                </form>
-                <h3>Preview</h3>
-            </div>
-            <div className="row mt-2">
-                <div className="col">
-                    <img src={src} className="form-control" alt="Image"/>
                 </div>
             </div>
-        </div>
-    )
+        )
+
+    }
 }
+
+
+// const Image = ({widget, preview, imageURLChanged, widgetNameChanged, nonUniqueName, nonUniqueWidgetId}) => {
+//
+//
+//     let inputElem;
+//     let inputNameElem;
+//     let name;
+//     if (widget.name != null)
+//         name = widget.name;
+//     else
+//         name = '';
+//
+//     let src;
+//     if (widget.src != null)
+//         src = widget.src;
+//     else
+//         src = '';
+//
+//     let inputImageSearch;
+//
+//     return (
+//         <div>
+//             <div className="mt-3" hidden={preview}>
+//                 <form className="">
+//                     <div className="form-group row">
+//                         <label htmlFor="imageUrl" className="col-sm-2 col-form-label "><h5>Image URL</h5></label>
+//                         <div className="col-sm-10">
+//                             <input className="form-control" id="imageUrl"
+//                                    onChange={() => imageURLChanged(widget.id, inputElem.value)}
+//                                    value={src}
+//                                    ref={node => inputElem = node} placeholder="Image URL"/>
+//                         </div>
+//                     </div>
+//
+//
+//                     <div className="form-group row">
+//                         <label htmlFor="imageSearch" className="col-sm-2 col-form-label"><h5>Image Search</h5></label>
+//                         <div id='gsearch' className="col-sm-10" ref={node => inputImageSearch = node}
+//                              // on={() => imageSearchRender(inputImageSearch,googleSearch) }
+//                         >
+//
+//                         </div>
+//                     </div>
+//
+//
+//                     <div className="form-group row">
+//                         <label htmlFor="widgetName" className="col-sm-2 col-form-label"><h5>Widget Name</h5></label>
+//                         <div className="col-sm-10">
+//                             <input className="form-control" id="widgetName" placeholder="Widget Name"
+//                                    onChange={() => widgetNameChanged(widget.id, inputNameElem.value)}
+//                                    value={name}
+//                                    ref={node => inputNameElem = node}/>
+//                             {nonUniqueName && nonUniqueWidgetId === widget.id &&
+//                             <div className="alert alert-danger mt-2" role="alert">
+//                                 The widget name is not unique!
+//                             </div>}
+//                         </div>
+//                     </div>
+//
+//
+//                 </form>
+//                 <h3>Preview</h3>
+//             </div>
+//             <div className="row mt-2">
+//                 <div className="col">
+//                     <img src={src} className="form-control" alt="Image"/>
+//                 </div>
+//             </div>
+//         </div>
+//     )
+// }
 
 const ImageContainer = connect(stateToPropsMapper, dispatchToPropsMapper)(Image)
 

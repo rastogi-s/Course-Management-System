@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import * as actions from "../actions"
 import WidgetContainer from '../components/Widget'
 
+
 class WidgetList extends Component {
     constructor(props) {
         super(props);
@@ -16,9 +17,8 @@ class WidgetList extends Component {
             console.log('inside if');
             this.props.findAllWidgetsForTopic();
         }
+
     }
-
-
 
 
     sort(jsonObj) {
@@ -31,9 +31,9 @@ class WidgetList extends Component {
     }
 
 
-    renderWidgets(){
-        var newWidgetList=[];
-        if(this.props.widgets!=undefined) {
+    renderWidgets() {
+        var newWidgetList = [];
+        if (this.props.widgets != undefined) {
             var widgets = this.sort(this.props.widgets);
 
 
@@ -87,12 +87,13 @@ class WidgetList extends Component {
                     </div>
 
                 </div>
+
             </div>
         )
     }
 }
 
-const stateToPropertiesMapper = (state,ownProps) => ({
+const stateToPropertiesMapper = (state, ownProps) => ({
     topicId: ownProps.topicId,
     widgets: state.widgets,
     previewMode: state.preview
